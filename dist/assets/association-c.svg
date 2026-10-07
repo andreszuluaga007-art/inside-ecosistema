@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Umbral entre dos espacios</title>
+  <desc id="desc">Ilustración monocromática de un umbral abierto hacia una zona clara, con un hilo que atraviesa el espacio.</desc>
+  <rect width="800" height="600" fill="#111f33"/>
+  <path d="M230 496V154c0-24 19-43 43-43h256c24 0 43 19 43 43v342" fill="none" stroke="#dce7ef" stroke-width="16" stroke-linecap="round" opacity=".92"/>
+  <path d="M295 496V186c0-14 11-25 25-25h162c14 0 25 11 25 25v310" fill="#284864" stroke="#dce7ef" stroke-width="5"/>
+  <path d="M355 496c-12-103 8-185 63-252 35-42 78-72 132-94" fill="none" stroke="#b9cad9" stroke-width="5" stroke-linecap="round" opacity=".85"/>
+  <path d="M328 496h224" stroke="#7896b4" stroke-width="6" stroke-linecap="round" opacity=".72"/>
+  <circle cx="630" cy="135" r="14" fill="#e8b45a"/>
+  <path d="M579 178c39-24 80-28 126-17" fill="none" stroke="#b9cad9" stroke-width="3" stroke-linecap="round" opacity=".42"/>
+</svg>

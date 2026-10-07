@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Piedra y reflejo</title>
+  <desc id="desc">Ilustración monocromática de una piedra suspendida sobre agua quieta y su reflejo incompleto.</desc>
+  <rect width="800" height="600" fill="#111f33"/>
+  <path d="M72 420c130-17 253-17 382 0 117 15 196 15 274 0" fill="none" stroke="#dce7ef" stroke-width="4" stroke-linecap="round" opacity=".72"/>
+  <path d="M102 455c132-12 249-12 370 0 113 11 186 11 256 0M145 494c104-8 225-8 342 0 108 7 178 7 238 0" fill="none" stroke="#7896b4" stroke-width="2" stroke-linecap="round" opacity=".46"/>
+  <path d="M275 392c10-54 28-107 69-155 34-40 78-64 132-73 21 45 25 93 9 139-22 60-71 88-139 103-27 6-50 3-71-14Z" fill="#dce4ea" opacity=".92"/>
+  <path d="M304 385c51-18 96-26 140-25 31 0 57-5 77-17" fill="none" stroke="#243e5b" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+  <path d="M350 425c8 35 11 62 4 87M409 420c10 39 11 76 1 114M469 414c12 35 17 63 12 92" fill="none" stroke="#b9cad9" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+  <circle cx="155" cy="168" r="12" fill="#e8b45a"/>
+  <path d="M126 210c33-14 69-16 107-7" fill="none" stroke="#b9cad9" stroke-width="3" stroke-linecap="round" opacity=".42"/>
+</svg>
