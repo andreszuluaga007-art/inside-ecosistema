@@ -37,12 +37,15 @@ jobs:
               relative = PurePosixPath(item['path'])
               if relative.parts[0] != 'dist' or '..' in relative.parts:
                   raise ValueError('Ruta fuera de dist')
-              url = SOURCE + quote('/'.join(relative.parts[1:]), safe='/')
-              request = Request(url, headers={'User-Agent': 'INSIDE-Publication/1.0'})
-              with urlopen(request, timeout=30) as response:
-                  if response.status != 200:
-                      raise RuntimeError('Respuesta no válida: ' + item['path'])
-                  data = response.read(item['size'] + 1)
+              if relative.suffix == '.html':
+                  data = Path(item['path']).read_bytes()
+              else:
+                  url = SOURCE + quote('/'.join(relative.parts[1:]), safe='/')
+                  request = Request(url, headers={'User-Agent': 'INSIDE-Publication/1.0'})
+                  with urlopen(request, timeout=30) as response:
+                      if response.status != 200:
+                          raise RuntimeError('Respuesta no válida: ' + item['path'])
+                      data = response.read(item['size'] + 1)
               digest = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
               if len(data) != item['size'] or digest != item['sha']:
                   raise RuntimeError('Archivo no idéntico a la versión validada: ' + item['path'])
