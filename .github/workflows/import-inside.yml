@@ -1,0 +1,74 @@
+name: Importar versión validada de INSIDE
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/import-inside.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: inside-import
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Leer el repositorio
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: '${{ github.sha }}'
+      - name: Copiar únicamente la web pública y verificar cada archivo
+        shell: bash
+        run: |
+          python - <<'PY'
+          from concurrent.futures import ThreadPoolExecutor
+          from pathlib import Path, PurePosixPath
+          from urllib.request import Request, urlopen
+          from urllib.parse import quote
+          import hashlib, json, shutil, tempfile
+          
+          SOURCE = 'https://inside-gimnasio-piloto.andreszuluaga007.chatgpt.site/'
+          MANIFEST = json.loads("[{\"path\":\"dist/app.js\",\"size\":19323,\"sha\":\"3fa8d65b08c17c9896b8f71ff06d7b8ffa1b915f\"},{\"path\":\"dist/assets/association-a.png\",\"size\":2103945,\"sha\":\"fce31c194ef3486747e49f187e691f7ea78fd80b\"},{\"path\":\"dist/assets/association-a.svg\",\"size\":1312,\"sha\":\"540f4d90271907f9d9665786a63bb59337f564aa\"},{\"path\":\"dist/assets/association-b.png\",\"size\":2031938,\"sha\":\"d056ef6e0bdeb4a44c0574abbccb619bd111d9ca\"},{\"path\":\"dist/assets/association-b.svg\",\"size\":1296,\"sha\":\"b752bc4e5285b66b8b16e65915f35f02866d86d1\"},{\"path\":\"dist/assets/association-c.png\",\"size\":1955795,\"sha\":\"f3c73367451dc634a908a0d02f3392826bc45dd5\"},{\"path\":\"dist/assets/association-c.svg\",\"size\":1040,\"sha\":\"6086622f2b1a9a301469609f88cd411463a7153f\"},{\"path\":\"dist/assets/audio/credits.html\",\"size\":1679,\"sha\":\"a9de4718b28cbd80a89a6646877be332a64502f3\"},{\"path\":\"dist/assets/audio/forest.mp3\",\"size\":1025325,\"sha\":\"d88c8d2554c538e250d96ffcc277fce45512e127\"},{\"path\":\"dist/assets/audio/luminous.mp3\",\"size\":769581,\"sha\":\"c8d1f7aeea377d412066b1ee258977ae48af83f5\"},{\"path\":\"dist/assets/flame.png\",\"size\":364966,\"sha\":\"8b6367cf70309ae44272606956d638ff553c3bd9\"},{\"path\":\"dist/assets/photos/beach-camera.jpg\",\"size\":105424,\"sha\":\"de2e9dc3476ef228ee19e06f329c49a12fd17be5\"},{\"path\":\"dist/assets/photos/bench.jpg\",\"size\":99305,\"sha\":\"5bfad50f7d40d0cf15bf99557309762615bf0662\"},{\"path\":\"dist/assets/photos/bird.jpg\",\"size\":90168,\"sha\":\"e631f07dd5e7a876c7b87e498ec6bd87046a5cae\"},{\"path\":\"dist/assets/photos/boat-bridge.jpg\",\"size\":131241,\"sha\":\"36c9c5cf4dab38fae63f3ffbdd957c770128d2ed\"},{\"path\":\"dist/assets/photos/bridge-reflection.jpg\",\"size\":155745,\"sha\":\"a602885d7ec827092a74f9545730a15df3a9e00a\"},{\"path\":\"dist/assets/photos/chair-shadow.jpg\",\"size\":140447,\"sha\":\"a619c4faa2f6b4f76e1f34041868e939c23c28f8\"},{\"path\":\"dist/assets/photos/coast-path.jpg\",\"size\":77534,\"sha\":\"c4bfd12ccfd24c8e849fee9269a015aaf25f967d\"},{\"path\":\"dist/assets/photos/dark-room.jpg\",\"size\":142737,\"sha\":\"95cfa5d13be4a51d0f4583e84337683345ad6851\"},{\"path\":\"dist/assets/photos/door-foliage.jpg\",\"size\":260708,\"sha\":\"9a4c594d12a555e07ca2cfeaa718a10cb3a8a399\"},{\"path\":\"dist/assets/photos/fog-forest.jpg\",\"size\":261599,\"sha\":\"1c53741fc736958078907bf15ae202da1f80e03c\"},{\"path\":\"dist/assets/photos/fog-mountain.jpg\",\"size\":155775,\"sha\":\"872e8409610e2b6533b2da09a656ed37f6bc6514\"},{\"path\":\"dist/assets/photos/hand-object.jpg\",\"size\":119392,\"sha\":\"f5f2938dfc34c711812c153e6ff5305c9cc9f172\"},{\"path\":\"dist/assets/photos/leaf-hand.jpg\",\"size\":125867,\"sha\":\"2cfde3b1a96677623a62206f3f7b49f53124eb62\"},{\"path\":\"dist/assets/photos/lone-tree.jpg\",\"size\":207991,\"sha\":\"a6c8e79d11b18cbae0206bce8533b1901eff2df6\"},{\"path\":\"dist/assets/photos/man-shadow.jpg\",\"size\":77513,\"sha\":\"d9ac2f2841190b06c21aed244fc5ca86928c0d1b\"},{\"path\":\"dist/assets/photos/open-door.jpg\",\"size\":203439,\"sha\":\"d2f3448155d32c7bd52ccb634a547ff5d01095ba\"},{\"path\":\"dist/assets/photos/people-bridge.jpg\",\"size\":95704,\"sha\":\"c5e4f39ae4970ec0048cf0a177199f70d6fc03e4\"},{\"path\":\"dist/assets/photos/person-window.jpg\",\"size\":63580,\"sha\":\"3c5bb477970f1a1ebf44ecd93a1035a5fbf4d1d2\"},{\"path\":\"dist/assets/photos/shadow-wall.jpg\",\"size\":55276,\"sha\":\"0d19141196435b00331f0c09c2935385092431df\"},{\"path\":\"dist/assets/photos/shark.jpg\",\"size\":65160,\"sha\":\"702067d431720334264f6e5c56887926e9541337\"},{\"path\":\"dist/assets/photos/shore.jpg\",\"size\":180909,\"sha\":\"9bc49b5fd935651c172f1c2ac28a809b8d244b9a\"},{\"path\":\"dist/assets/photos/window-toy.jpg\",\"size\":107002,\"sha\":\"85a73bb09bab69e33877418fb21b1bd09120e326\"},{\"path\":\"dist/assets/q1-a.svg\",\"size\":881,\"sha\":\"1407174fb39992d311ecc2b42d58ac5698fd009b\"},{\"path\":\"dist/assets/q1-b.svg\",\"size\":1029,\"sha\":\"646fe0e6104f1a0c5b49c13a768be4d760eee9bf\"},{\"path\":\"dist/assets/q1-c.svg\",\"size\":810,\"sha\":\"b8a0c048905d4bff78294f4443207e2a56a08d12\"},{\"path\":\"dist/assets/q2-a.svg\",\"size\":906,\"sha\":\"ab8c4391dacd11280720e0c3287e26b72328a540\"},{\"path\":\"dist/assets/q2-b.svg\",\"size\":847,\"sha\":\"ec5eedf60623fdfa5ffae883cb7cda426a38398a\"},{\"path\":\"dist/assets/q2-c.svg\",\"size\":836,\"sha\":\"a7cda9ccabe2bafb20789a68991cb8db62e4d1b0\"},{\"path\":\"dist/assets/q3-a.svg\",\"size\":839,\"sha\":\"805ecf735c7ac1e4cb935766d8acd8cf3625cf5c\"},{\"path\":\"dist/assets/q3-b.svg\",\"size\":857,\"sha\":\"dd27d792ca4863d00035d285fe7794c71838f482\"},{\"path\":\"dist/assets/q3-c.svg\",\"size\":863,\"sha\":\"b79f0868858a52bc1b02443144be830f57d959b2\"},{\"path\":\"dist/assets/stone.png\",\"size\":3168107,\"sha\":\"516f4c4e60bbd461c0da95af50c15f7db70bb760\"},{\"path\":\"dist/audio.js\",\"size\":4128,\"sha\":\"226a22b106ca7c1ff53bc8ad06f447bcdd5c21e5\"},{\"path\":\"dist/core.js\",\"size\":1295,\"sha\":\"f7fe44da66233a090fc34ec1c62abd1d5535027f\"},{\"path\":\"dist/index.html\",\"size\":19786,\"sha\":\"e1c74b85752626c017904aef6ec910207a39f455\"},{\"path\":\"dist/learning.js\",\"size\":19384,\"sha\":\"af3f071d48f95b770133303e298d904a47933bfb\"},{\"path\":\"dist/practices.js\",\"size\":40072,\"sha\":\"f2944cb0a5447b8b7af975a85f31d11572194ada\"},{\"path\":\"dist/styles.css\",\"size\":28078,\"sha\":\"da335e324971ad9245c0ee8a05166bffdee2f4fd\"}]")
+          
+          def download(item):
+              relative = PurePosixPath(item['path'])
+              if relative.parts[0] != 'dist' or '..' in relative.parts:
+                  raise ValueError('Ruta fuera de dist')
+              url = SOURCE + quote('/'.join(relative.parts[1:]), safe='/')
+              request = Request(url, headers={'User-Agent': 'INSIDE-Publication/1.0'})
+              with urlopen(request, timeout=30) as response:
+                  if response.status != 200:
+                      raise RuntimeError('Respuesta no válida: ' + item['path'])
+                  data = response.read(item['size'] + 1)
+              digest = hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest()
+              if len(data) != item['size'] or digest != item['sha']:
+                  raise RuntimeError('Archivo no idéntico a la versión validada: ' + item['path'])
+              return item['path'], data
+          
+          with tempfile.TemporaryDirectory() as folder:
+              staging = Path(folder)
+              with ThreadPoolExecutor(max_workers=4) as executor:
+                  for relative, data in executor.map(download, MANIFEST):
+                      target = staging / relative
+                      target.parent.mkdir(parents=True, exist_ok=True)
+                      target.write_bytes(data)
+              for item in MANIFEST:
+                  source = staging / item['path']
+                  destination = Path(item['path'])
+                  destination.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copyfile(source, destination)
+          print('INSIDE: 49 archivos públicos verificados por tamaño y SHA.')
+          PY
+      - name: Guardar la versión completa
+        shell: bash
+        run: |
+          git add -- dist
+          if git diff --cached --quiet; then
+            echo 'La versión ya está sincronizada.'
+            exit 0
+          fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Publicar INSIDE: versión clara con nueve prácticas, fotografías y audio'
+          git push origin HEAD:main
