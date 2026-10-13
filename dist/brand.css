@@ -1,0 +1,12 @@
+.brand{display:inline-flex;align-items:center;gap:12px;letter-spacing:.14em}
+.brand-symbol{display:block;width:45px;height:56px;object-fit:contain;flex:0 0 auto}
+.brand-wordmark{display:block}
+.home-brand-block{display:flex;align-items:center;gap:24px;margin:0 0 21px;max-width:620px}
+.home-brand-symbol{display:block;width:138px;height:138px;object-fit:contain;flex:0 0 auto}
+.home-brand-text{min-width:0}
+.home-brand-name{display:block;font:400 2rem var(--serif);letter-spacing:.16em;color:var(--ink);line-height:1.1}
+.home-brand-motto{font:400 1.03rem var(--serif);margin:8px 0 12px;color:var(--ink);line-height:1.4}
+.home-brand-purpose{font-size:1rem;margin:0 0 6px;color:var(--muted)}
+.home-brand-weekly{font-size:.875rem;margin:0;color:var(--blue)}
+@media(max-width:680px){.brand{gap:9px}.brand-symbol{width:34px;height:44px}.home-brand-block{gap:17px;margin-bottom:15px}.home-brand-symbol{width:102px;height:112px}.home-brand-name{font-size:1.75rem}.home-brand-motto{font-size:.94rem;margin:6px 0 9px}.home-brand-purpose{font-size:.94rem}.home-brand-weekly{font-size:.8125rem}}
+@media(max-width:440px){.brand{font-size:1.1rem;letter-spacing:.1em;gap:8px}.brand-caption{display:none}.brand-symbol{width:28px;height:36px}.home-brand-block{gap:14px}.home-brand-symbol{width:82px;height:102px}.home-brand-name{font-size:1.6rem}.home-brand-purpose{font-size:.9rem}.home-brand-weekly{font-size:.8125rem}}
