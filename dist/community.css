@@ -1,0 +1,20 @@
+.home-message-card{margin-top:1.9rem;padding:1.15rem 1.3rem;border:1px solid #b7deed;border-radius:20px;background:linear-gradient(120deg,#fff,#f2fbff);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.home-message-card h2{margin:0 0 .35rem;color:#075f83;font-size:1.14rem;font-weight:600}
+.home-message-card p{margin:0;font-size:.95rem;line-height:1.5;max-width:31rem}
+.home-message-card .text-button{flex-shrink:0;text-decoration:underline;text-underline-offset:4px}
+#site-footer{display:block}
+.footer-heading,.footer-links{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.footer-links{flex-wrap:wrap;justify-content:flex-end}
+.visit-counter{margin-top:1.15rem;padding-top:1rem;border-top:1px solid #c6e5f1;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;font-size:.88rem;color:#205e78}
+.visit-values{display:flex;gap:1.6rem;align-items:baseline;flex-wrap:wrap}
+.visit-values strong{font-size:1.13rem;color:#075f83;margin-left:.3rem;font-variant-numeric:tabular-nums}
+.visit-counter .text-button{font-size:.84rem;padding:.2rem .4rem}
+.visit-counter .quiet-note{flex-basis:100%;margin:0;font-size:.8rem}
+.direct-message-dialog{max-width:630px}
+.direct-message-dialog label{display:block;font-weight:600;margin:1.1rem 0 .5rem}
+.direct-message-dialog textarea{width:100%;max-width:100%;min-height:140px;resize:vertical;font:inherit;line-height:1.6;padding:1rem;border:1px solid #96cbe0;border-radius:14px;color:#075f83;background:#fff}
+.direct-message-dialog textarea:focus-visible{outline:3px solid #8ad5f3;outline-offset:3px}
+.direct-message-actions{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin:1rem 0}
+.direct-message-actions [aria-disabled=true]{opacity:.65}
+.direct-email{color:#075f83;overflow-wrap:anywhere;text-underline-offset:3px}
+@media(max-width:680px){.home-message-card{align-items:flex-start;flex-direction:column;padding:1rem}.footer-heading{align-items:flex-start;flex-direction:column;gap:.6rem}.footer-links{justify-content:flex-start;gap:.8rem}.visit-counter{gap:.7rem}.visit-values{gap:1.1rem}.direct-message-actions{align-items:stretch;flex-direction:column}.direct-message-actions a,.direct-message-actions button{text-align:center}.direct-message-dialog{width:calc(100% - 28px);padding:1.2rem}}
