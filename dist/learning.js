@@ -1,120 +1,435 @@
 const INSIDE_LESSONS = {
-  notar: {
-    territory: 'Contacto', title: 'Volver al presente', skill: 'Atención flexible y metaconciencia',
-    summary: 'Cuando pierdes el hilo de una conversación o una tarea.',
-    intro: {what: 'Notar dónde se fue tu atención y elegir un detalle al que volver.', why: 'Puedes descubrir la distracción antes de seguir respondiendo en automático.', purpose: 'Ensayar cómo recuperar el hilo de una actividad cotidiana.'},
-    steps: [
-      {question: 'En una actividad tranquila de hoy, ¿qué detalle puede ayudarte a volver a lo que haces?', reflection: 'Elige un detalle de esa actividad: una palabra que lees, un sonido cercano o el contacto de tus manos.', why: 'Estás eligiendo a qué prestar atención en este momento.', skill: 'Elegir un punto de atención'},
-      {question: 'Mientras vuelves a esa actividad, ¿qué sensación notas en tu cuerpo?', reflection: 'Nota el apoyo de tus pies, la temperatura o una tensión. Si no notas algo claro, puedes dejarlo abierto; no necesitas producir una sensación.', why: 'Aquí practicas observar una sensación, sin usarla como una prueba de que algo va bien o mal.', skill: 'Notar una sensación'},
-      {question: 'Si vuelves a distraerte, ¿cómo reconocerías que te fuiste y dónde retomarías?', reflection: 'Prueba «me fui a otro asunto». Luego vuelve a una frase, un sonido o el gesto que estabas haciendo.', why: 'La habilidad incluye reconocer que te distraes y elegir dónde volver; no exige atención perfecta.', skill: 'Recuperar el hilo'}
+  "notar": {
+    "territory": "Contacto",
+    "title": "Volver al presente",
+    "skill": "Atención flexible y metaconciencia",
+    "summary": "Cuando cambias de una pantalla a otra sin decidirlo.",
+    "intro": {
+      "what": "Reconocer un cambio de atención y elegir a qué quieres volver.",
+      "why": "Puedes notar el impulso de cambiar de tarea antes de seguirlo.",
+      "purpose": "Ensayar una elección de atención en una actividad tranquila y segura."
+    },
+    "steps": [
+      {
+        "question": "En una actividad tranquila, ¿qué detalle te indica que tu atención se fue a otra cosa?",
+        "reflection": "Elige un detalle: volviste a leer una línea, abriste otra pantalla o dejaste de escuchar. Basta con reconocerlo.",
+        "why": "Observas una señal concreta de distracción; no estás midiendo qué tan bien te concentras.",
+        "skill": "Reconocer una señal"
+      },
+      {
+        "question": "Antes de cambiar de tarea, ¿qué notas fuera de ti o en tu cuerpo?",
+        "reflection": "Mira un objeto cercano o nota el apoyo de tus manos. Elige lo que te resulte cómodo; puedes dejar la pregunta abierta.",
+        "why": "Practicas orientar la atención sin tener que eliminar los pensamientos ni buscar una sensación especial.",
+        "skill": "Elegir qué observar"
+      },
+      {
+        "question": "¿A qué quieres prestar atención ahora y cuál sería un gesto para volver?",
+        "reflection": "Puedes volver a una frase, cerrar una pantalla o elegir conscientemente otra tarea. Prueba un gesto pequeño.",
+        "why": "La flexibilidad también permite cambiar de actividad cuando decides que eso tiene sentido.",
+        "skill": "Decidir dónde estar"
+      }
     ],
-    example: {situation: 'En una conversación cotidiana, piensas en tus pendientes y pierdes parte de lo que te dicen.', response: 'Me fui a mis pendientes. Vuelvo a escuchar y, si hace falta, pido que repitan la última parte.', explanation: 'Reconoces la distracción y retomas algo concreto de la conversación. Puedes volver a distraerte.'},
-    check: {question: 'Mientras alguien te habla, notas que pensabas en tus pendientes. ¿Qué ensaya volver al presente?', options: ['Repasar todos mis pendientes antes de seguir escuchando.', 'Notar la distracción, volver a escuchar y pedir que repita si hace falta.', 'Exigirme escuchar sin que vuelva a aparecer otro pensamiento.'], answer: 1, explanation: 'La segunda opción reconoce lo que ocurrió y propone cómo retomar. Pedir una aclaración también puede ser parte de volver a la conversación.'},
-    transfer: 'Si quiero retomar una conversación cotidiana, puedo volver a escuchar y pedir que repitan una parte.', next: 'perspectiva'
+    "example": {
+      "situation": "Estás leyendo algo breve y abres otra aplicación casi sin darte cuenta.",
+      "response": "Noto que cambié de pantalla. Puedo volver a una frase o decidir que ahora necesito atender otra cosa.",
+      "explanation": "La práctica consiste en notar y elegir. Mantener la misma tarea a toda costa no es la única respuesta posible."
+    },
+    "check": {
+      "question": "Descubres que cambiaste de aplicación sin decidirlo. ¿Qué respuesta ensaya atención flexible?",
+      "options": [
+        "Cerrar todo y exigirme terminar sin volver a distraerme.",
+        "Reconocer el cambio y elegir si vuelvo a una frase o atiendo otra tarea.",
+        "Mantener abiertas todas las aplicaciones para no tener que elegir."
+      ],
+      "answer": 1,
+      "explanation": "La segunda opción reconoce el cambio y propone una elección concreta. Volver o cambiar de actividad depende de tu situación, no de lograr atención perfecta."
+    },
+    "transfer": "Si noto un cambio automático de pantalla, puedo elegir una tarea y un gesto pequeño para atenderla.",
+    "next": "perspectiva"
   },
-  perspectiva: {
-    territory: 'Perspectiva', title: 'Tomar distancia de una idea', skill: 'Defusión cognitiva',
-    summary: 'Cuando una duda viene acompañada de «voy a quedar mal».',
-    intro: {what: 'Reconocer un pensamiento que aparece cuando necesitas aclarar algo.', why: 'Una predicción de tu mente puede influir en lo que decides preguntar.', purpose: 'Considerar tus opciones con ese pensamiento todavía presente.'},
-    steps: [
-      {question: 'Cuando necesitas aclarar algo, ¿qué pensamiento puede frenarte?', reflection: 'Recuerda una duda pequeña. Nombra la frase que aparece: «si pregunto, pareceré incapaz», por ejemplo.', why: 'Identificas una frase que puede influir en tu decisión, sin asumir que sea una orden.', skill: 'Reconocer la frase'},
-      {question: 'Si empiezas esa frase con «mi mente dice…», ¿qué notas?', reflection: 'Prueba nombrarla con ese comienzo. Observa lo que ocurre; también puede no cambiar cómo te sientes.', why: 'El ensayo consiste en reconocer el pensamiento; no en producir una sensación obligatoria de distancia.', skill: 'Nombrar un pensamiento'},
-      {question: 'Con esa idea presente, ¿qué información o acción quieres considerar?', reflection: 'Piensa qué necesitas aclarar y si quieres formular una pregunta concreta. Puedes valorar el contexto antes de actuar.', why: 'Observar la idea deja espacio para examinar opciones, sin tener que demostrar que sea falsa.', skill: 'Considerar tus opciones'}
+  "perspectiva": {
+    "territory": "Perspectiva",
+    "title": "Tomar distancia de una idea",
+    "skill": "Defusión cognitiva",
+    "summary": "Cuando aparece «si no sale perfecto, no vale empezar».",
+    "intro": {
+      "what": "Observar una regla exigente antes de iniciar una actividad pequeña.",
+      "why": "Una frase puede sonar convincente sin que tengas que tratarla como una instrucción.",
+      "purpose": "Considerar un ensayo imperfecto si tiene sentido para ti."
+    },
+    "steps": [
+      {
+        "question": "Ante una actividad sencilla que te gustaría probar, ¿qué regla exigente aparece?",
+        "reflection": "Elige una situación pequeña. Reconoce una frase como «debe salir bien a la primera», sin convertirla en una obligación.",
+        "why": "Identificas la regla verbal que aparece antes de decidir si quieres seguirla.",
+        "skill": "Notar una regla"
+      },
+      {
+        "question": "¿Cómo suena esa frase si la presentas como algo que estás pensando?",
+        "reflection": "Prueba «estoy pensando que debe salir perfecto». Nota qué pasa, aunque no cambie nada; puedes usar tus propias palabras.",
+        "why": "Nombras la frase como pensamiento. No es una técnica para garantizar que deje de importarte.",
+        "skill": "Nombrar el pensamiento"
+      },
+      {
+        "question": "Aunque esa regla siga presente, ¿qué ensayo estarías dispuesto a considerar?",
+        "reflection": "Piensa en un borrador, una pregunta o una prueba sencilla. Puedes decidir no hacerlo ahora si el contexto no es adecuado.",
+        "why": "Examinar una opción no requiere ganar una discusión interna ni asegurar cómo saldrá el resultado.",
+        "skill": "Considerar un ensayo"
+      }
     ],
-    example: {situation: 'No entiendes una indicación y aparece «si pregunto, van a pensar que no soy capaz».', response: 'Mi mente dice que voy a quedar mal. Puedo pedir que aclaren una parte concreta de la indicación.', explanation: 'Nombras la predicción y consideras una pregunta. No necesitas garantizar cómo te evaluarán.'},
-    check: {question: 'Tienes una duda y piensas «si pregunto, quedaré mal». ¿Qué respuesta ensaya tomar distancia?', options: ['Esperar a estar seguro de que nadie me juzgará.', 'Discutir con la idea hasta conseguir que desaparezca.', 'Mi mente dice «quedaré mal». Puedo valorar si pedir una aclaración.'], answer: 2, explanation: 'La tercera opción reconoce la predicción como pensamiento y mantiene abierta una decisión. No asegura que la idea sea falsa ni obliga a preguntar.'},
-    transfer: 'Ante una duda pequeña, nombraré la predicción de mi mente y consideraré si necesito aclarar algo.', next: 'integrar'
+    "example": {
+      "situation": "Quieres probar a dibujar y aparece «si va a quedar mal, mejor ni lo intento».",
+      "response": "Estoy pensando que solo vale si queda bien. Puedo valorar hacer un boceto sencillo, aunque esa frase siga ahí.",
+      "explanation": "No afirmas que el dibujo será bueno ni que la idea sea falsa. Consideras qué relación quieres tener con esa regla."
+    },
+    "check": {
+      "question": "Piensas «si el primer boceto no queda bien, no vale intentarlo». ¿Qué ensaya tomar distancia?",
+      "options": [
+        "Esperar a estar seguro de que me saldrá bien.",
+        "Convencerme de que todas mis ideas sobre el dibujo son falsas.",
+        "Notar esa regla como pensamiento y considerar si quiero probar un boceto."
+      ],
+      "answer": 2,
+      "explanation": "La tercera opción observa la regla sin exigir que desaparezca. La decisión de probar sigue siendo tuya; el ejercicio no promete un resultado."
+    },
+    "transfer": "Ante una regla de perfección, puedo nombrarla como pensamiento y elegir si quiero hacer una prueba pequeña.",
+    "next": "integrar"
   },
-  preocupacion: {
-    territory: 'Contacto', title: 'Hechos y posibilidades', skill: 'Perspectiva ante la incertidumbre',
-    summary: 'Cuando un cambio todavía no tiene todos sus detalles.',
-    intro: {what: 'Distinguir el dato que tienes de lo que anticipas sobre un cambio.', why: 'Un aviso incompleto puede ir acompañado de interpretaciones todavía no comprobadas.', purpose: 'Identificar qué información falta y qué puedes atender ahora.'},
-    steps: [
-      {question: 'Ante un cambio cotidiano que te preocupa, ¿qué información recibiste realmente?', reflection: 'Elige un cambio pequeño. Describe qué se anunció y qué sigue sin confirmarse; no completes los detalles que faltan.', why: 'Describes la información disponible antes de añadir una explicación o una predicción.', skill: 'Reconocer el dato'},
-      {question: '¿Qué consecuencia estás imaginando y todavía no sabes si ocurrirá?', reflection: 'Empieza con «me preocupa que podría…». Distingue esa posibilidad de una consecuencia ya confirmada.', why: 'Reconocer lo incierto no descarta un riesgo; diferencia lo que sabes de lo que aún necesitas comprobar.', skill: 'Separar la anticipación'},
-      {question: '¿Qué dato te serviría para decidir y qué paso puedes dar para obtenerlo?', reflection: 'Considera una pregunta concreta, revisar el aviso o esperar la confirmación. Elige según la situación.', why: 'Tu siguiente paso puede ser conseguir información, en lugar de resolver todas las posibilidades ahora.', skill: 'Buscar información útil'}
+  "preocupacion": {
+    "territory": "Contacto",
+    "title": "Hechos y posibilidades",
+    "skill": "Perspectiva ante la incertidumbre",
+    "summary": "Cuando un mensaje ambiguo se convierte en una conclusión.",
+    "intro": {
+      "what": "Separar un mensaje recibido de las explicaciones que estás imaginando.",
+      "why": "Puede faltar información para saber qué significa una frase breve.",
+      "purpose": "Elegir si necesitas aclarar algo o atender otra cosa mientras esperas."
+    },
+    "steps": [
+      {
+        "question": "Ante un mensaje cotidiano que te inquieta, ¿cuáles fueron sus palabras concretas?",
+        "reflection": "Elige un mensaje leve. Recuerda sus palabras sin añadir intenciones; si no lo recuerdas bien, deja ese dato abierto.",
+        "why": "Distingues lo que recibiste de una interpretación; eso no convierte tu inquietud en un error.",
+        "skill": "Volver al mensaje"
+      },
+      {
+        "question": "¿Qué explicación estás dando por cierta y qué información falta para comprobarla?",
+        "reflection": "Prueba «estoy imaginando que…». Nombra también qué dato no tienes, sin obligarte a encontrar una explicación tranquilizadora.",
+        "why": "Una posibilidad puede ser importante y seguir sin estar confirmada.",
+        "skill": "Reconocer lo que falta"
+      },
+      {
+        "question": "¿Una pregunta concreta aportaría información útil o puedes esperar mientras haces otra cosa?",
+        "reflection": "Considera una aclaración si es oportuna. Si no hay información nueva disponible, puedes elegir qué atender mientras tanto.",
+        "why": "El paso se elige según la información y el contexto, no para resolver de una vez toda la incertidumbre.",
+        "skill": "Elegir qué atender"
+      }
     ],
-    example: {situation: 'Te avisan que cambiará el horario de una actividad, pero todavía no dicen cuál será.', response: 'Sé que anunciaron un cambio. Aún no sé el nuevo horario. Puedo preguntar cuándo lo confirmarán.', explanation: 'Separas el anuncio de sus posibles efectos y eliges qué información pedir. La preocupación puede seguir presente.'},
-    check: {question: 'Te anuncian un cambio de horario sin dar los detalles. ¿Qué puedes afirmar con esa información?', options: ['Se anunció un cambio; el nuevo horario todavía no está confirmado.', 'El cambio seguro impedirá que pueda participar.', 'Si aún no sé el horario, no hay nada que pueda preguntar.'], answer: 0, explanation: 'La primera opción conserva el dato y lo que falta por saber. Las otras añaden conclusiones que el aviso no permite confirmar.'},
-    transfer: 'Ante un aviso incompleto, separaré el dato de mi anticipación y elegiré una pregunta que me ayude a decidir.', next: 'relaciones'
+    "example": {
+      "situation": "Alguien te escribe «después hablamos» sin decir el tema y piensas que ocurrió un problema.",
+      "response": "El mensaje propone hablar después; no dice sobre qué. Puedo preguntar por el tema si es oportuno o seguir con lo que estaba haciendo.",
+      "explanation": "Separar el mensaje de tu explicación no asegura que todo esté bien. Permite reconocer qué sabes y qué sigue abierto."
+    },
+    "check": {
+      "question": "Recibes «después hablamos», sin más detalles. ¿Qué afirmación se limita a la información disponible?",
+      "options": [
+        "La persona propone hablar después; todavía no sé el tema.",
+        "Si propone hablar después, seguro hay un problema conmigo.",
+        "Si no conozco el tema, debo concluir que no tiene importancia."
+      ],
+      "answer": 0,
+      "explanation": "La primera opción conserva las palabras del mensaje y el dato que falta. Las otras añaden una conclusión, negativa o tranquilizadora, que todavía no está confirmada."
+    },
+    "transfer": "Ante un mensaje ambiguo, puedo separar sus palabras de mi interpretación y decidir si conviene aclarar algo.",
+    "next": "relaciones"
   },
-  autocritica: {
-    territory: 'Perspectiva', title: 'Mirar más allá de una etiqueta', skill: 'Perspectiva de ti y metaconciencia',
-    summary: 'Cuando una confusión termina en una etiqueta sobre ti.',
-    intro: {what: 'Describir un error cotidiano sin convertirlo en una definición de ti.', why: 'Una etiqueta general deja fuera los detalles del episodio y otras experiencias tuyas.', purpose: 'Reconocer tu responsabilidad y una posibilidad de reparación.'},
-    steps: [
-      {question: 'Después de una confusión pequeña, ¿qué etiqueta podrías ponerte?', reflection: 'Reconoce una frase como «soy un desastre». Nota que aparece ante un episodio concreto, no como una descripción completa.', why: 'Identificas una manera de hablarte antes de tratarla como todo lo que eres.', skill: 'Observar una etiqueta'},
-      {question: '¿Qué acción concreta describe lo ocurrido, sin usar esa etiqueta?', reflection: 'Prueba «confundí la hora» o «no revisé la fecha». Conserva lo que hiciste y el efecto que necesitas atender.', why: 'Una descripción específica permite reconocer qué pasó y qué puedes revisar o reparar.', skill: 'Precisar el episodio'},
-      {question: '¿Qué otra experiencia tuya deja fuera esa etiqueta?', reflection: 'Recuerda un momento distinto que también forme parte de tu historia. No necesitas usarlo para negar el error actual.', why: 'Tu mirada puede incluir la dificultad y otras experiencias, sin reducirte a una sola de ellas.', skill: 'Ampliar la mirada'}
+  "autocritica": {
+    "territory": "Perspectiva",
+    "title": "Mirar más allá de una etiqueta",
+    "skill": "Perspectiva de ti y metaconciencia",
+    "summary": "Cuando comparar un avance termina en «yo no sirvo».",
+    "intro": {
+      "what": "Reconocer una comparación y describir tu situación sin una etiqueta global.",
+      "why": "Comparar un resultado no muestra toda tu historia ni todas las condiciones de ese resultado.",
+      "purpose": "Identificar un dato útil sin convertirlo en una definición de tu valor."
+    },
+    "steps": [
+      {
+        "question": "Al comparar un avance con el de otra persona, ¿qué etiqueta tiendes a ponerte?",
+        "reflection": "Elige una comparación cotidiana y leve. Reconoce la frase que aparece, sin asumir que describe todo lo que eres.",
+        "why": "Puedes observar cómo te estás describiendo en esa situación.",
+        "skill": "Notar la comparación"
+      },
+      {
+        "question": "¿Qué sabes de tu propio proceso y qué parte del proceso ajeno no conoces?",
+        "reflection": "Nombra un dato propio, como el tiempo que dedicaste. Deja abiertas las condiciones de la otra persona que no conoces.",
+        "why": "Describes el contexto disponible sin inventar explicaciones sobre ti ni sobre la otra persona.",
+        "skill": "Incluir el contexto"
+      },
+      {
+        "question": "¿Qué descripción concreta de tu situación te serviría para decidir un siguiente paso?",
+        "reflection": "Prueba «voy por esta parte y necesito revisar esto». Puedes reconocer una dificultad sin convertirla en una identidad.",
+        "why": "Una descripción concreta permite examinar un ajuste, en lugar de usar una etiqueta como conclusión final.",
+        "skill": "Describir para revisar"
+      }
     ],
-    example: {situation: 'Confundiste la hora de un encuentro informal y llegaste tarde. Aparece «siempre soy un desastre».', response: 'Confundí la hora. Puedo reconocerlo, disculparme si corresponde y revisar cómo anotar el próximo encuentro.', explanation: 'Asumes una acción concreta y consideras una reparación. La etiqueta añade una definición más amplia que ese episodio.'},
-    check: {question: 'Confundiste la hora de un encuentro. ¿Qué descripción permite revisar lo ocurrido?', options: ['Soy una persona incapaz de organizar cualquier cosa.', 'Confundí la hora; puedo reconocerlo y revisar cómo anotarla.', 'Para no criticarme, debo actuar como si no hubiera pasado.'], answer: 1, explanation: 'La segunda opción describe el episodio y una posibilidad de ajuste. Ampliar tu perspectiva puede convivir con reconocer un error y su efecto.'},
-    transfer: 'Si convierto un error pequeño en una etiqueta, describiré lo ocurrido y consideraré qué puedo reparar.', next: 'autocuidado'
+    "example": {
+      "situation": "Otra persona termina un proyecto personal antes que tú y aparece «yo no sirvo para esto».",
+      "response": "Estoy comparando dos avances. Sé en qué parte voy; puedo revisar si necesito tiempo, apoyo o un objetivo distinto.",
+      "explanation": "No niegas la diferencia entre los avances. Revisas qué información aporta sin usarla como medida completa de tu valor."
+    },
+    "check": {
+      "question": "Otra persona termina antes un proyecto personal. ¿Qué descripción permite examinar tu situación?",
+      "options": [
+        "Eso demuestra que no soy capaz de aprender nada.",
+        "Todavía voy por esta parte; puedo revisar qué necesito para continuar.",
+        "Para respetarme, debo afirmar que su avance no tiene valor."
+      ],
+      "answer": 1,
+      "explanation": "La segunda opción reconoce tu punto de partida y una revisión posible. No necesita descalificarte ni descalificar a la otra persona."
+    },
+    "transfer": "Si una comparación se vuelve una etiqueta, puedo describir mi punto de partida y qué necesito revisar.",
+    "next": "autocuidado"
   },
-  espacio: {
-    territory: 'Contacto', title: 'Dar espacio a una emoción', skill: 'Aceptación',
-    summary: 'Cuando un plan cambia y aparece una decepción leve.',
-    intro: {what: 'Reconocer una emoción leve ante un cambio de planes.', why: 'Puedes observar cómo respondes al malestar antes de elegir tu siguiente paso.', purpose: 'Considerar un cuidado o una acción sin exigir que la emoción desaparezca.'},
-    steps: [
-      {question: 'Ante un cambio pequeño de planes, ¿qué emoción leve podrías reconocer?', reflection: 'Piensa en una situación manejable. Puedes nombrar decepción, frustración u otra emoción, o describir una sensación.', why: 'Nombras la experiencia que quieres observar; no tienes que encontrar la palabra exacta.', skill: 'Reconocer la emoción'},
-      {question: '¿Qué sueles hacer para intentar apartar esa emoción y qué efecto tiene?', reflection: 'Observa una respuesta habitual. Nota si te sirve en ese momento o si deja algo que quieres atender después.', why: 'Revisas la función de tu respuesta, sin convertir distraerte o sentir malestar en un error.', skill: 'Observar cómo respondes'},
-      {question: 'Si la emoción sigue presente, ¿qué cuidado o decisión puedes considerar?', reflection: 'Piensa si necesitas una pausa, expresar tu necesidad o ajustar el plan. Puedes parar este ensayo si no te resulta oportuno.', why: 'Dar espacio a lo que sientes no te obliga a seguir un plan ni a permanecer en una situación dañina.', skill: 'Dar espacio y cuidarte'}
+  "espacio": {
+    "territory": "Contacto",
+    "title": "Dar espacio a una emoción",
+    "skill": "Aceptación",
+    "summary": "Cuando una espera cotidiana despierta impaciencia leve.",
+    "intro": {
+      "what": "Observar impaciencia leve durante una espera cotidiana y segura.",
+      "why": "Puedes reconocer el malestar y examinar qué respuesta quieres dar.",
+      "purpose": "Elegir si esperar, pedir información o cambiar de plan según la situación."
+    },
+    "steps": [
+      {
+        "question": "En una espera cotidiana no urgente, ¿cómo reconoces una impaciencia leve?",
+        "reflection": "Piensa en una situación manejable. Puedes nombrar la emoción o un impulso, como mirar la hora varias veces.",
+        "why": "Reconoces una experiencia sin tener que justificarla ni hacerla desaparecer.",
+        "skill": "Reconocer la impaciencia"
+      },
+      {
+        "question": "¿Qué haces con esa impaciencia y qué efecto tiene en esa situación?",
+        "reflection": "Observa una acción habitual. Pregúntate si te aporta información o si preferirías probar otra respuesta en ese momento.",
+        "why": "Revisas cómo funciona una respuesta para ti, sin clasificar la emoción como buena o mala.",
+        "skill": "Observar tu respuesta"
+      },
+      {
+        "question": "Con la impaciencia presente, ¿qué opción quieres considerar para cuidarte?",
+        "reflection": "Puedes esperar, preguntar cuánto falta o elegir otro momento. Aceptar una emoción no te obliga a seguir esperando.",
+        "why": "La elección sigue dependiendo de tus necesidades y del contexto; no de aguantar por obligación.",
+        "skill": "Elegir con la emoción presente"
+      }
     ],
-    example: {situation: 'Se pospone un plan que te hacía ilusión y notas una decepción leve.', response: 'Esto me decepciona. Puedo tomarme una pausa y después decidir qué quiero hacer con ese rato.', explanation: 'Reconoces lo que sientes y conservas opciones. La práctica no requiere que el malestar desaparezca.'},
-    check: {question: 'Se pospone un plan y aparece decepción leve. ¿Qué respuesta reconoce la emoción y permite elegir?', options: ['No debería sentir decepción por algo tan pequeño.', 'Tengo que seguir ocupado hasta asegurar que ya no siento nada.', 'Esto me decepciona; puedo decidir si necesito una pausa o ajustar el plan.'], answer: 2, explanation: 'La tercera opción reconoce la emoción y deja una decisión a tu alcance. Darle espacio no obliga a soportar daño ni a continuar si necesitas parar.'},
-    transfer: 'Si me resulta oportuno, probaré nombrar una decepción leve y elegir si necesito una pausa o ajustar el plan.', next: 'orientarse'
+    "example": {
+      "situation": "Esperas un turno no urgente en una situación segura y notas una impaciencia leve.",
+      "response": "Noto que me impaciento. Puedo pedir información sobre la espera y decidir si me conviene quedarme o volver otro día.",
+      "explanation": "Reconoces el malestar y conservas opciones. Dar espacio a la emoción no equivale a aceptar cualquier condición de la espera."
+    },
+    "check": {
+      "question": "En una espera cotidiana segura aparece impaciencia leve. ¿Qué respuesta reconoce la emoción y permite elegir?",
+      "options": [
+        "Exigirme estar tranquilo antes de decidir qué hacer.",
+        "Quedarme el tiempo que sea necesario para demostrar que acepto.",
+        "Notar la impaciencia y decidir si esperar, preguntar o cambiar de plan."
+      ],
+      "answer": 2,
+      "explanation": "La tercera opción conserva el reconocimiento de la emoción y la posibilidad de actuar. Aceptar lo que sientes no exige aguantar daño ni renunciar a tus necesidades."
+    },
+    "transfer": "Si una espera no urgente me impacienta, puedo reconocerlo y valorar si esperar, pedir información o cambiar de plan.",
+    "next": "orientarse"
   },
-  orientarse: {
-    territory: 'Dirección', title: 'Elegir lo que importa', skill: 'Valores',
-    summary: 'Cuando quieres decidir cómo participar en un desacuerdo.',
-    intro: {what: 'Elegir una cualidad que quieras expresar en una decisión compartida.', why: 'Puedes orientar tu forma de actuar sin controlar el resultado de la conversación.', purpose: 'Distinguir una dirección elegida de un resultado que deseas conseguir.'},
-    steps: [
-      {question: 'En una decisión cotidiana compartida, ¿cómo te importa participar?', reflection: 'Nombra una cualidad elegida por ti: respeto, honestidad, curiosidad u otra. No hay una respuesta impuesta.', why: 'Exploras la forma de actuar que quieres cuidar, sin buscar un valor obligatorio para todas las personas.', skill: 'Elegir una cualidad'},
-      {question: '¿Esa dirección habla de cómo quieres actuar o de un resultado que no depende solo de ti?', reflection: 'Distingue «dialogar con respeto» de «conseguir que piensen como yo». Puedes probar con la cualidad que elegiste.', why: 'Un valor orienta tu forma de actuar; no asegura que otras personas respondan como deseas.', skill: 'Distinguir dirección y resultado'},
-      {question: '¿Qué gesto concreto expresaría esa cualidad en la situación que elegiste?', reflection: 'Considera escuchar una razón, hacer una pregunta o expresar tu desacuerdo con claridad. Adáptalo a una conversación segura.', why: 'Conectas una dirección elegida con una conducta que puedes considerar en tu contexto.', skill: 'Traducir un valor en acción'}
+  "orientarse": {
+    "territory": "Dirección",
+    "title": "Elegir lo que importa",
+    "skill": "Valores",
+    "summary": "Cuando varias cosas te importan y no caben todas hoy.",
+    "intro": {
+      "what": "Reconocer dos asuntos importantes y elegir una prioridad para una ocasión concreta.",
+      "why": "No siempre puedes expresar todo lo que valoras en el mismo momento.",
+      "purpose": "Elegir una acción sin convertir la prioridad de hoy en una regla para siempre."
+    },
+    "steps": [
+      {
+        "question": "Ante dos asuntos cotidianos importantes, ¿qué te gustaría cuidar en cada uno?",
+        "reflection": "Nombra una cualidad por cada asunto: aprender con curiosidad, compartir con atención u otra que elijas.",
+        "why": "Exploras direcciones que te importan; no buscas una respuesta correcta igual para todas las personas.",
+        "skill": "Reconocer lo que importa"
+      },
+      {
+        "question": "Con el tiempo y las condiciones de hoy, ¿qué decides atender primero y qué tendría que esperar?",
+        "reflection": "Considera una prioridad para esta ocasión. Reconoce también lo que dejas pendiente, sin tratarlo como algo sin valor.",
+        "why": "Elegir en una situación concreta no obliga a establecer una jerarquía definitiva entre tus valores.",
+        "skill": "Elegir según el contexto"
+      },
+      {
+        "question": "¿Qué acción pequeña expresaría esa prioridad sin prometer que podrás hacerlo todo?",
+        "reflection": "Elige un gesto concreto y realista. Si quieres cuidar lo pendiente después, piensa qué sería necesario revisar.",
+        "why": "Conectas una dirección elegida con una acción y reconoces los límites de esta ocasión.",
+        "skill": "Actuar con una prioridad"
+      }
     ],
-    example: {situation: 'En una conversación cotidiana segura, otra persona propone un plan distinto del que prefieres.', response: 'Si elijo respeto, puedo escuchar su razón y explicar mi preferencia sin exigir que esté de acuerdo.', explanation: 'El respeto es una dirección elegida; escuchar y expresar tu preferencia son acciones. El acuerdo es un resultado posible.'},
-    check: {question: 'En un desacuerdo cotidiano seguro, quieres expresar respeto. ¿Qué acción lo pone en práctica?', options: ['Escuchar una razón y expresar mi desacuerdo con claridad.', 'Conseguir que la otra persona esté de acuerdo conmigo.', 'Asegurar que nadie se incomode con lo que yo diga.'], answer: 0, explanation: 'La primera opción describe una forma de participar. Las otras proponen resultados que no dependen solo de ti; respetar no exige estar de acuerdo.'},
-    transfer: 'Antes de una decisión compartida, nombraré cómo quiero actuar y un gesto concreto que lo exprese.', next: 'integrar'
+    "example": {
+      "situation": "Tienes un rato breve y te importa tanto aprender algo como compartir tiempo con alguien cercano.",
+      "response": "Hoy puedo elegir compartir con atención. Aprender también me importa; revisaré qué otro momento sería posible, sin prometerlo todavía.",
+      "explanation": "La prioridad responde a esta ocasión. Otra situación puede llevarte a elegir algo distinto sin que la primera elección sea falsa."
+    },
+    "check": {
+      "question": "Dos asuntos te importan y hoy no caben ambos. ¿Qué opción conecta una prioridad con tus condiciones?",
+      "options": [
+        "Elegir una acción para esta ocasión y reconocer qué queda pendiente.",
+        "Prometer que haré los dos aunque no disponga del tiempo necesario.",
+        "Concluir que lo que no elija hoy ya no debe importarme."
+      ],
+      "answer": 0,
+      "explanation": "La primera opción permite actuar y reconocer un límite. No existe una prioridad universal que el caso pueda imponer para todas las ocasiones."
+    },
+    "transfer": "Cuando no quepa todo lo importante, puedo elegir una acción para esta ocasión y reconocer lo que queda pendiente.",
+    "next": "integrar"
   },
-  relaciones: {
-    territory: 'Dirección', title: 'Expresar una necesidad', skill: 'Comunicación consciente y límites',
-    summary: 'Cuando recibes una petición no urgente que no puedes atender ahora.',
-    intro: {what: 'Preparar una petición ante un mensaje no urgente, en una conversación segura.', why: 'Pedir claridad permite revisar lo solicitado sin adivinar lo que la otra persona espera.', purpose: 'Expresar qué puedes ofrecer y qué acción depende de ti.'},
-    steps: [
-      {question: 'Ante una petición no urgente, ¿qué te pidieron realmente y qué estás suponiendo?', reflection: 'Separa el mensaje recibido de la urgencia que imaginas. Si falta un dato, considera cómo preguntar por él.', why: 'Distingues la petición de tu interpretación antes de decidir cómo responder.', skill: 'Aclarar lo solicitado'},
-      {question: '¿Qué necesidad o plazo quieres proponer de forma concreta?', reflection: 'Ensaya «necesito tiempo para revisarlo; ¿para cuándo lo necesitan?». Cambia las palabras según lo que quieras pedir.', why: 'Tu petición da información sobre lo que necesitas y abre una posibilidad de acuerdo.', skill: 'Formular una petición'},
-      {question: 'Si ahora no puedes atender esa petición, ¿qué acción está a tu alcance?', reflection: 'Piensa si puedes avisar cuándo responderás, proponer otro momento o explicar que no puedes asumirlo.', why: 'Un límite practicable expresa tu disponibilidad; no garantiza ni controla la reacción de la otra persona.', skill: 'Comunicar tu disponibilidad'}
+  "relaciones": {
+    "territory": "Dirección",
+    "title": "Expresar una necesidad",
+    "skill": "Comunicación consciente y límites",
+    "summary": "Cuando necesitas pedir un ajuste en un espacio compartido.",
+    "intro": {
+      "what": "Preparar una petición sobre una situación cotidiana en un espacio compartido seguro.",
+      "why": "Describir una conducta y una petición no equivale a controlar la respuesta de otra persona.",
+      "purpose": "Expresar lo que necesitas y considerar una acción que dependa de ti."
+    },
+    "steps": [
+      {
+        "question": "En un espacio compartido seguro, ¿qué ocurrió y qué interpretación estás añadiendo?",
+        "reflection": "Describe una conducta, como el volumen de un sonido. Distingue ese dato de una etiqueta sobre la intención de la otra persona.",
+        "why": "Nombras una situación concreta antes de preparar la petición.",
+        "skill": "Describir la situación"
+      },
+      {
+        "question": "¿Qué cambio concreto quieres pedir y cómo podrías expresarlo con claridad?",
+        "reflection": "Ensaya «estoy haciendo…, ¿podrías… durante…?». Elige un cambio específico que se pueda conversar.",
+        "why": "Una petición concreta permite entender qué estás proponiendo, sin exigir que la otra persona lo adivine.",
+        "skill": "Pedir un ajuste"
+      },
+      {
+        "question": "Si no es posible llegar a ese acuerdo, ¿qué opción segura está a tu alcance?",
+        "reflection": "Considera otro horario, otro lugar o terminar la conversación por ahora. No necesitas confrontar una situación insegura.",
+        "why": "Distingues tu acción de la respuesta ajena y conservas la posibilidad de cuidarte.",
+        "skill": "Revisar tus opciones"
+      }
     ],
-    example: {situation: 'En un grupo de organización cotidiana, te piden revisar algo no urgente cuando no puedes atenderlo.', response: 'Ahora no puedo revisarlo. Mañana puedo dedicarle un rato; ¿ese plazo les sirve?', explanation: 'Expresas tu disponibilidad y propones un acuerdo. Puedes revisar el plazo si aparecen datos nuevos.'},
-    check: {question: 'Recibes una petición no urgente que no puedes revisar ahora. ¿Qué respuesta expresa tu disponibilidad?', options: ['La otra persona debería saber cuándo puedo responder.', 'Ahora no puedo revisarlo; puedo hacerlo mañana. ¿Ese plazo te sirve?', 'Voy a conseguir que la otra persona no se moleste con mi respuesta.'], answer: 1, explanation: 'La segunda opción comunica una condición y un plazo para conversar. Puedes proponer otro plazo; el límite no depende de controlar una reacción.'},
-    transfer: 'Ante una petición no urgente, puedo revisar qué puedo ofrecer y comunicar un plazo que pueda sostener.', next: 'autocritica'
+    "example": {
+      "situation": "Estás leyendo en un espacio compartido seguro y el volumen de un sonido te dificulta seguir.",
+      "response": "Estoy intentando leer. ¿Podríamos bajar el volumen un rato? Si ahora no es posible, revisaré si me sirve otro lugar.",
+      "explanation": "Describes la situación, haces una petición y consideras una acción propia. La petición no garantiza que haya acuerdo."
+    },
+    "check": {
+      "question": "Quieres pedir menos ruido en un espacio compartido seguro. ¿Qué respuesta formula una petición concreta?",
+      "options": [
+        "Dejar de hablar hasta que la otra persona adivine lo que necesito.",
+        "Estoy leyendo; ¿podríamos bajar el volumen durante un rato?",
+        "Afirmar que la otra persona hace ruido porque no le importo."
+      ],
+      "answer": 1,
+      "explanation": "La segunda opción expresa la situación y el ajuste solicitado. Las otras no formulan una petición concreta o atribuyen una intención no comprobada."
+    },
+    "transfer": "Si necesito un ajuste en un espacio compartido seguro, puedo describir la situación y hacer una petición concreta.",
+    "next": "autocritica"
   },
-  autocuidado: {
-    territory: 'Perspectiva', title: 'Tratarte con respeto', skill: 'Autocompasión práctica',
-    summary: 'Cuando tu energía de hoy no coincide con lo que te estás exigiendo.',
-    intro: {what: 'Reconocer una necesidad y revisar una exigencia ante un cansancio leve.', why: 'Puedes considerar tus condiciones actuales sin reducirlas a una falta de voluntad.', purpose: 'Elegir un cuidado y ajustar qué parte de una tarea puedes atender.'},
-    steps: [
-      {question: 'En un momento de cansancio leve, ¿qué necesidad querrías atender primero?', reflection: 'Piensa en una pausa, descanso, compañía o apoyo. Elige algo concreto que tenga sentido para tus condiciones.', why: 'Reconoces una necesidad para considerar cómo cuidarla, sin convertir el cuidado en otra exigencia.', skill: 'Reconocer tus condiciones'},
-      {question: '¿Cómo te hablarías con respeto aunque todavía haya una tarea pendiente?', reflection: 'Prueba «hoy esto me cuesta; puedo revisar qué necesito y qué es posible». Usa palabras que te resulten propias.', why: 'Una frase respetuosa puede reconocer la dificultad y lo pendiente, sin insultarte ni negar lo ocurrido.', skill: 'Ensayar un trato respetuoso'},
-      {question: '¿Qué consideras necesario hoy y qué podrías simplificar, posponer o pedir que te ayuden a hacer?', reflection: 'Distingue lo que quieres atender de lo que puede esperar. Un cuidado posible también puede ser pedir apoyo o parar.', why: 'Ajustas la tarea a tus condiciones y examinas opciones; no tienes que demostrar tu valor terminándolo todo.', skill: 'Ajustar una exigencia'}
+  "autocuidado": {
+    "territory": "Perspectiva",
+    "title": "Tratarte con respeto",
+    "skill": "Autocompasión práctica",
+    "summary": "Cuando una invitación opcional se convierte en otra exigencia.",
+    "intro": {
+      "what": "Revisar cómo te hablas al decidir sobre un plan opcional cuando necesitas descanso.",
+      "why": "Puedes reconocer tus condiciones sin reducirlas a una falta de interés o de voluntad.",
+      "purpose": "Considerar una respuesta respetuosa contigo y con las otras personas."
+    },
+    "steps": [
+      {
+        "question": "Ante un plan opcional y un cansancio leve, ¿qué necesidad te gustaría tener en cuenta?",
+        "reflection": "Elige una situación cotidiana. Reconoce qué necesitas y qué te atrae del plan, sin obligarte todavía a decidir.",
+        "why": "Puedes incluir tanto tu necesidad como el interés por compartir, sin convertir uno de ellos en una falta.",
+        "skill": "Reconocer lo que necesitas"
+      },
+      {
+        "question": "¿Qué frase respetuosa reconocería esa necesidad sin descalificarte?",
+        "reflection": "Prueba «me importa compartir y hoy también necesito descanso». Adapta la frase; no tiene que sonar positiva ni convincente.",
+        "why": "Ensayas un trato respetuoso, no una frase para asegurar que desaparezcan la culpa o la duda.",
+        "skill": "Hablarte sin descalificarte"
+      },
+      {
+        "question": "¿Qué opción quieres considerar: asistir, adaptar el plan, proponer otro momento o no participar?",
+        "reflection": "Valora tus condiciones y los compromisos reales. Si decides cambiar algo, considera cómo comunicarlo con claridad.",
+        "why": "La práctica no decide por ti. Puedes cuidar una necesidad y reconocer el efecto de tu respuesta en otras personas.",
+        "skill": "Elegir un cuidado posible"
+      }
     ],
-    example: {situation: 'Tras una jornada exigente, tienes poca energía para hacer una tarea doméstica.', response: 'Hoy tengo menos energía. Puedo elegir una parte que considero necesaria y dejar otra para después, o pedir apoyo.', explanation: 'Consideras tu necesidad y un ajuste concreto. El cuidado no requiere negar lo pendiente ni terminar toda la tarea.'},
-    check: {question: 'Tienes cansancio leve y una tarea doméstica pendiente. ¿Qué respuesta ensaya un trato respetuoso?', options: ['Insultarme para obligarme a terminar todo hoy.', 'Afirmar que nada está pendiente para no sentirme mal.', 'Reconocer mi cansancio y valorar qué simplificar, posponer o pedir que me ayuden a hacer.'], answer: 2, explanation: 'La tercera opción reconoce tus condiciones y considera un ajuste. Puedes cuidar una necesidad sin convertir el descanso en algo que debas ganarte.'},
-    transfer: 'Si una exigencia supera mis condiciones de hoy, puedo revisar qué necesito y qué simplificar, posponer o pedir.', next: 'preocupacion'
+    "example": {
+      "situation": "Te invitan a un plan opcional, tienes cansancio leve y piensas que descansar sería fallarle a todo el mundo.",
+      "response": "Me importa compartir, y hoy necesito revisar cómo estoy. Puedo valorar ir un rato, proponer otro día o decir que no.",
+      "explanation": "El cuidado no exige aceptar ni rechazar siempre. Consiste aquí en considerar tus condiciones sin insultarte y comunicar tu decisión."
+    },
+    "check": {
+      "question": "Tienes cansancio leve ante una invitación opcional. ¿Qué respuesta ensaya un trato respetuoso?",
+      "options": [
+        "Decidir que descansar solo vale si nadie se decepciona.",
+        "Aceptar automáticamente para no tener que considerar lo que necesito.",
+        "Reconocer mi necesidad y valorar una respuesta que pueda comunicar con claridad."
+      ],
+      "answer": 2,
+      "explanation": "La tercera opción incluye tus condiciones y una decisión revisable. No garantiza evitar toda decepción ni convierte asistir o descansar en la única respuesta correcta."
+    },
+    "transfer": "Ante un plan opcional, puedo reconocer mis necesidades y elegir una respuesta que quiera comunicar con respeto.",
+    "next": "preocupacion"
   },
-  integrar: {
-    territory: 'Dirección', title: 'Dar un paso posible', skill: 'Acción comprometida',
-    summary: 'Cuando esperas tener un momento ideal para retomar algo que importa.',
-    intro: {what: 'Elegir un primer paso pequeño y una ocasión real para probarlo.', why: 'Puedes concretar una intención sin esperar que estén dadas todas las condiciones ideales.', purpose: 'Aprender del intento, también cuando necesitas cambiar el plan.'},
-    steps: [
-      {question: 'Para retomar algo que te importa, ¿cuál sería una versión pequeña del primer paso?', reflection: 'Elige una acción observable: leer un párrafo, ordenar un material o escribir una pregunta. Ajusta su tamaño a tu día.', why: 'Defines qué quieres intentar, en lugar de dejar la intención como una tarea enorme o imprecisa.', skill: 'Concretar el primer paso'},
-      {question: '¿Qué momento real de tu día podría servir como ocasión para probarlo?', reflection: 'Completa «después de…, probaré…». Elige una ocasión posible y una acción que tenga sentido para ti.', why: 'Vinculas el paso con una situación reconocible; el plan puede cambiar si cambian tus condiciones.', skill: 'Elegir una ocasión'},
-      {question: 'Si el intento no sale como esperabas, ¿qué ajustarías del momento, tamaño o apoyo?', reflection: 'Elige un dato para revisar: si hubo tiempo, qué se interpuso o qué ayuda faltó. Considera un ajuste para otro intento.', why: 'Revisas las condiciones del ensayo. Empezar o no empezar no define tu valor ni obliga a continuar hoy.', skill: 'Aprender y ajustar'}
+  "integrar": {
+    "territory": "Dirección",
+    "title": "Dar un paso posible",
+    "skill": "Acción comprometida",
+    "summary": "Cuando un intento se interrumpe y parece que ya no vale retomarlo.",
+    "intro": {
+      "what": "Revisar un paso interrumpido y decidir si quieres retomarlo de otra manera.",
+      "why": "Un plan puede necesitar un ajuste cuando cambian las condiciones.",
+      "purpose": "Elegir si continuar, modificar o dejar un intento según lo que sigue importándote."
+    },
+    "steps": [
+      {
+        "question": "En un intento cotidiano pequeño, ¿qué ibas a hacer y dónde se interrumpió?",
+        "reflection": "Describe el paso y lo que ocurrió: faltó tiempo, llegó otra tarea o cambió una condición. No hace falta convertirlo en una etiqueta.",
+        "why": "Identificas qué parte del plan necesita una revisión, sin resumir todo el intento como un fracaso.",
+        "skill": "Revisar la interrupción"
+      },
+      {
+        "question": "¿Lo que querías cuidar sigue siendo importante para ti en las condiciones actuales?",
+        "reflection": "Considera si quieres mantener esa dirección, cambiarla o dejarla por ahora. Continuar no es la única respuesta válida.",
+        "why": "Revisar un compromiso también permite decidir si sigue teniendo sentido para ti.",
+        "skill": "Revisar la dirección"
+      },
+      {
+        "question": "Si quieres retomarlo, ¿qué paso ajustado y qué ocasión podrías elegir?",
+        "reflection": "Completa «cuando…, probaré…». Puedes reducir el paso, pedir apoyo o elegir otro momento según lo que observaste.",
+        "why": "El nuevo intento responde a las condiciones que reconociste; no exige compensar de golpe lo que no hiciste.",
+        "skill": "Ajustar el siguiente intento"
+      }
     ],
-    example: {situation: 'Quieres retomar una lectura que te importa, pero esperas tener una hora completamente libre.', response: 'Después de una tarea cotidiana, probaré leer un párrafo. Luego revisaré si ese momento y ese tamaño me sirven.', explanation: 'El plan conecta una ocasión con un paso concreto. Puedes ajustar ambos según lo que ocurra.'},
-    check: {question: 'Quieres retomar una lectura que te importa. ¿Qué plan permite probar y revisar un primer paso?', options: ['Después de comer, probaré leer un párrafo y revisaré si ese momento me sirve.', 'Decidir que desde hoy leeré sin interrupciones durante toda la tarde.', 'Esperar hasta estar seguro de que no habrá ningún obstáculo.'], answer: 0, explanation: 'La primera opción propone una ocasión, una acción pequeña y una revisión. No garantiza constancia ni convierte un intento difícil en un fracaso personal.'},
-    transfer: 'Si decido probarlo, elegiré una ocasión para un paso pequeño y después revisaré si necesito ajustar el plan.', next: 'espacio'
+    "example": {
+      "situation": "Preparabas un material para aprender algo y una interrupción te llevó a dejarlo a medias.",
+      "response": "Quedó en esta parte. Si todavía me importa retomarlo, puedo elegir un paso más pequeño y otro momento posible.",
+      "explanation": "Puedes revisar dónde retomar o si conviene empezar de otra manera; el ajuste no tiene que ser un castigo."
+    },
+    "check": {
+      "question": "Un paso pequeño quedó interrumpido. ¿Qué respuesta permite revisar un compromiso sin actuar por inercia?",
+      "options": [
+        "Comprobar si aún me importa y elegir, si quiero, un paso y una ocasión ajustados.",
+        "Repetir exactamente el mismo plan aunque las condiciones hayan cambiado.",
+        "Abandonar para siempre esa dirección porque un intento no se completó."
+      ],
+      "answer": 0,
+      "explanation": "La primera opción revisa dirección, condiciones y acción. Persistir o cambiar de plan puede tener sentido según tu situación; el caso no impone continuar a cualquier costo."
+    },
+    "transfer": "Cuando un plan se interrumpa, puedo revisar si quiero retomarlo y elegir un paso ajustado a mis condiciones.",
+    "next": "espacio"
   }
 };
 if (typeof module !== 'undefined') module.exports = {INSIDE_LESSONS};
