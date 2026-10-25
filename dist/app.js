@@ -1,72 +1,132 @@
 (function(){'use strict';
  const C=window.InsideCore,$=id=>document.getElementById(id),KEY='inside-pauses-v2',LEGACY_KEY='inside-gimnasio-piloto-v1';
- let state=C.freshState(),screen='home-screen',territory='Contacto',practice=null,lastPractice=null,toastTimer=null,resumeAfterSound=false,contactReturnTo='about-trigger',messageReturnTo='home-message';
- const sound=new window.InsideAudio(),labels={off:'Sonido',ambient:'Bosque',music:'Música'},hints={Contacto:'Para notar dónde está tu atención, qué sientes y qué sabes de una situación.',Perspectiva:'Para tomar distancia de una idea y ensayar una forma respetuosa de hablarte.',Dirección:'Para elegir una dirección, expresar una necesidad y dar un paso posible.'};
- const phaseScreens={example:['example-screen','example-title'],question:['question-screen','practice-title'],insight:['insight-screen','insight-title'],check:['check-screen','check-title'],feedback:['check-feedback-screen','check-feedback-title']};
+ let state=C.freshState(),screen='home-screen',territory='all',practice=null,lastPractice=null,toastTimer=null,resumeAfterSound=false,messageReturnTo='home-message';
+ const sound=new window.InsideAudio(),labels={off:'Sonido',ambient:'Bosque',music:'Música'};
+ const hints={all:'Puedes empezar por cualquiera. No hay un orden obligatorio.',Contacto:'Tres actividades para volver a lo que haces, pausar o revisar una preocupación.',Perspectiva:'Tres actividades para decidir con dudas, hablarte con respeto o atender una necesidad.',Dirección:'Tres actividades para elegir una prioridad, pedir algo o empezar una tarea.'};
+ const phaseScreens={example:['example-screen','example-title'],step:['step-screen','practice-title'],check:['check-screen','check-title'],feedback:['feedback-screen','feedback-title']};
  try{const saved=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem(LEGACY_KEY)||'null');if(saved?.remember===true)state=C.sanitizeState(saved);}catch(_){}
  function notify(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,4200);}
- function renderStorage(){$('remember-practices').checked=state.remember;$('storage-note').textContent=state.remember?'Solo se recuerdan las prácticas visitadas; no tus respuestas ni tus imágenes.':'Sin activar esta opción, el registro termina al cerrar la página.';}
- function persist(){try{if(state.remember)localStorage.setItem(KEY,JSON.stringify(state));else localStorage.removeItem(KEY);localStorage.removeItem(LEGACY_KEY);}catch(_){state.remember=false;notify('Puedes seguir. Este navegador no pudo recordar las prácticas.');}renderStorage();}
- function syncSound(){sound.setBlocked(document.hidden||!practice||!practice.running||$('sound-dialog').open||$('about-dialog').open||$('contact-dialog').open||$('direct-message-dialog').open);}
- function showScreen(next,focusId){if(screen==='finish-screen'&&next!==screen)resetCreatorMessage();screen=next;document.querySelectorAll('[data-screen]').forEach(node=>node.hidden=node.id!==next);$('site-footer').hidden=['intro-screen','example-screen','question-screen','insight-screen','check-screen','check-feedback-screen','pause-screen'].includes(next);$('exit').hidden=['home-screen','outside-screen'].includes(next);$('exit').textContent=next==='explore-screen'?'Inicio':'Terminar';syncSound();$(next).scrollTop=0;window.scrollTo(0,0);requestAnimationFrame(()=>{(focusId?$(focusId):$('main')).focus({preventScroll:true});});}
- function renderSound(){document.querySelectorAll('input[name="ambience"]').forEach(input=>input.checked=input.value===sound.ambience);$('ambient-volume-row').hidden=sound.ambience==='off';$('sound-label').textContent=labels[sound.ambience];}
- function openSound(){resumeAfterSound=!!practice?.running;if(practice)practice.running=false;syncSound();renderSound();$('sound-status').textContent=practice&&practice.phase!=='intro'?'La práctica está en pausa mientras eliges.':'El fondo comienza al entrar al ejemplo de la práctica.';$('sound-dialog').showModal();}
- sound.callbacks={onError(message){$('sound-status').textContent=message;notify(message);renderSound();}};
- $('sound-trigger').addEventListener('click',openSound);document.querySelectorAll('input[name="ambience"]').forEach(input=>input.addEventListener('change',async()=>{if(input.checked){$('sound-status').textContent=input.value==='off'?'Silencio seleccionado.':'Preparando el fondo…';await sound.setAmbience(input.value);renderSound();if(sound.ambience===input.value)$('sound-status').textContent=input.value==='off'?'Silencio seleccionado.':'Fondo listo. Se escuchará durante la práctica.';}}));
- $('ambient-volume').addEventListener('input',()=>{sound.setVolume(Number($('ambient-volume').value)/100);$('ambient-volume-value').textContent=$('ambient-volume').value+' %';});
- $('sound-dialog').addEventListener('close',()=>{if(resumeAfterSound&&practice){if(!document.hidden&&screen!=='pause-screen')practice.running=true;else pausePractice();}resumeAfterSound=false;syncSound();renderSound();});
- document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>$(button.dataset.close).close()));
- function openContact(event){contactReturnTo=event.currentTarget?.id||event.target?.id||'about-trigger';if(contactReturnTo==='about-contact')contactReturnTo='about-trigger';if(practice&&practice.phase!=='intro')pausePractice();if($('about-dialog').open)$('about-dialog').close();$('contact-dialog').showModal();syncSound();$('contact-title').focus({preventScroll:true});}
- document.querySelectorAll('[data-open-contact]').forEach(button=>button.addEventListener('click',openContact));$('contact-dialog').addEventListener('close',()=>{syncSound();$(contactReturnTo).focus({preventScroll:true});});
- function updateDirectMessage(){const text=$('direct-message-text').value.trim(),ready=text.length>0&&text.length<=1000,subject=encodeURIComponent('Un mensaje para Andrés Zuluaga · INSIDE'),body=encodeURIComponent(text);$('direct-message-mail').href=ready?'mailto:inside.ecosistema@gmail.com?subject='+subject+'&body='+body:'#direct-message-text';$('direct-message-gmail').href=ready?'https://mail.google.com/mail/?view=cm&fs=1&to=inside.ecosistema%40gmail.com&su='+subject+'&body='+body:'#direct-message-text';['direct-message-mail','direct-message-gmail'].forEach(id=>$(id).setAttribute('aria-disabled',String(!ready)));$('direct-message-error').hidden=true;return ready;}
- function clearDirectMessage(){$('direct-message-text').value='';updateDirectMessage();}
- function openDirectMessage(event){messageReturnTo=event.currentTarget?.id||event.target?.id||'home-message';if(practice&&practice.phase!=='intro')pausePractice();clearDirectMessage();$('direct-message-dialog').showModal();syncSound();$('direct-message-title').focus({preventScroll:true});}
- document.querySelectorAll('[data-open-message]').forEach(button=>button.addEventListener('click',openDirectMessage));$('direct-message-text').addEventListener('input',updateDirectMessage);
- ['direct-message-mail','direct-message-gmail'].forEach(id=>$(id).addEventListener('click',event=>{if(!updateDirectMessage()){event.preventDefault();$('direct-message-error').textContent='Escribe un mensaje de hasta 1000 caracteres antes de abrir tu correo.';$('direct-message-error').hidden=false;$('direct-message-text').focus();}}));
- $('direct-message-clear').addEventListener('click',()=>{clearDirectMessage();$('direct-message-text').focus();});$('direct-message-dialog').addEventListener('close',()=>{clearDirectMessage();syncSound();$(messageReturnTo).focus({preventScroll:true});});
- function updateCreatorMessage(){const message=$('creator-message-text').value.trim(),ready=message.length>0&&message.length<=1000;$('creator-message-mail').href=ready?'mailto:inside.ecosistema@gmail.com?subject='+encodeURIComponent('Un mensaje para Andrés Zuluaga · INSIDE')+'&body='+encodeURIComponent(message):'#creator-message-text';$('creator-message-mail').setAttribute('aria-disabled',String(!ready));$('creator-message-error').hidden=true;return ready;}
- function resetCreatorMessage(){$('creator-message-text').value='';$('creator-message').open=false;updateCreatorMessage();}
- $('creator-message-text').addEventListener('input',updateCreatorMessage);
- $('creator-message-mail').addEventListener('click',event=>{if(!updateCreatorMessage()){event.preventDefault();$('creator-message-error').textContent=$('creator-message-text').value.trim()?'El mensaje puede tener hasta 1000 caracteres.':'Escribe un mensaje si deseas compartirlo.';$('creator-message-error').hidden=false;$('creator-message-text').focus();}});
- $('creator-message-clear').addEventListener('click',()=>{$('creator-message-text').value='';updateCreatorMessage();$('creator-message-text').focus();});
- function endPractice(next='outside-screen'){practice=null;$('chosen-image').src='assets/photos/coast-path.jpg';$('chosen-image').alt='';showScreen(next,next==='home-screen'?'home-title':next==='outside-screen'?'outside-title':'explore-title');}
- $('brand').addEventListener('click',event=>{event.preventDefault();endPractice('home-screen');});$('exit').addEventListener('click',()=>endPractice(screen==='explore-screen'?'home-screen':'outside-screen'));$('back-home').addEventListener('click',()=>showScreen('home-screen','home-title'));$('start-now').addEventListener('click',()=>startPractice('notar'));
- function openExplore(next=territory){if(typeof next==='string'&&Object.hasOwn(hints,next))territory=next;practice=null;renderExplore();showScreen('explore-screen','explore-title');}
+ function renderStorage(){$('remember-practices').checked=state.remember;$('storage-note').textContent=state.remember?'Este navegador recuerda qué actividades abriste. No guarda tus respuestas.':'Sin esta opción, la lista de actividades abiertas se borra al cerrar la página.';}
+ function persist(){try{if(state.remember)localStorage.setItem(KEY,JSON.stringify(state));else localStorage.removeItem(KEY);localStorage.removeItem(LEGACY_KEY);}catch(_){state.remember=false;notify('Puedes seguir. Este navegador no pudo recordar las actividades.');}renderStorage();}
+ function syncSound(){sound.setBlocked(document.hidden||!practice?.running||['sound-dialog','about-dialog','contact-dialog','direct-message-dialog'].some(id=>$(id).open));}
+ function showScreen(next,focusId){screen=next;document.querySelectorAll('[data-screen]').forEach(node=>node.hidden=node.id!==next);$('site-footer').hidden=['example-screen','step-screen','check-screen','feedback-screen','pause-screen'].includes(next);syncSound();window.scrollTo(0,0);requestAnimationFrame(()=>$(focusId||'main').focus({preventScroll:true}));}
+ function home(){practice=null;resumeAfterSound=false;showScreen('home-screen','home-title');}
+ function openExplore(next='all'){territory=Object.hasOwn(hints,next)?next:'all';practice=null;resumeAfterSound=false;renderExplore();showScreen('explore-screen','explore-title');}
+ function renderExplore(){
+  document.querySelectorAll('[data-territory]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.territory===territory)));
+  $('territory-hint').textContent=hints[territory];$('practice-list').replaceChildren();
+  C.practices.filter(p=>territory==='all'||p.territory===territory).forEach(p=>{
+   const button=document.createElement('button');button.type='button';button.className='practice-choice';
+   for(const [className,copy] of [['practice-card-title',p.title],['practice-card-summary',p.summary],['practice-card-status',state.completed.includes(p.id)?'Ya la abriste. Puedes volver.':'Un ejemplo y tres pasos.']]){
+    const span=document.createElement('span');span.className=className;span.textContent=copy;button.appendChild(span);
+   }
+   button.addEventListener('click',()=>startPractice(p.id));$('practice-list').appendChild(button);
+  });
+ }
+ function startPractice(id){
+  const p=C.byId(id);if(!p)throw new Error('Actividad desconocida');
+  state=C.finish(state,id);persist();practice={id,step:0,running:true,phase:'example'};
+  $('example-title').textContent=p.title;$('activity-meaning').textContent=p.meaning;
+  $('example-situation').textContent=p.example.situation;$('example-response').textContent=p.example.response;
+  showScreen('example-screen','example-title');
+ }
+ function renderStep(){
+  const p=C.byId(practice.id),step=C.questionAt(p,practice.step);
+  $('practice-name').textContent=p.title;$('step-count').textContent='Paso '+(practice.step+1)+' de '+p.steps.length;
+  $('practice-progress').max=p.steps.length;$('practice-progress').value=practice.step+1;
+  $('practice-title').textContent=step.prompt;$('practice-hint').textContent=step.hint;$('step-example').textContent=step.answerExample;
+  $('step-previous').disabled=practice.step===0;$('step-next').textContent=practice.step===p.steps.length-1?'Ver una idea para mi día':'Siguiente paso';
+ }
+ function advance(direction){
+  if(!practice?.running||practice.phase!=='step')return;
+  if(direction<0&&practice.step===0)return;
+  if(direction>0&&practice.step===C.byId(practice.id).steps.length-1){finishPractice();return;}
+  practice.step+=direction;renderStep();showScreen('step-screen','practice-title');
+ }
+ function finishPractice(){if(!practice?.running)return;lastPractice=practice.id;practice=null;renderFinish();}
+ function renderFinish(){
+  if(!lastPractice)return;const p=C.byId(lastPractice);
+  $('finish-meaning').textContent=p.takeaway;$('finish-transfer').textContent=p.tryLater;$('finish-more').open=false;
+  showScreen('finish-screen','finish-title');
+ }
+ function openCase(){
+  if(!lastPractice)return;practice={id:lastPractice,step:0,running:true,phase:'check'};
+  renderCase();showScreen('check-screen','check-title');
+ }
+ function renderCase(){const p=C.byId(practice.id);$('check-title').textContent=p.check.question;['a','b','c'].forEach((letter,index)=>$('check-'+letter).textContent=p.check.options[index]);}
+ function pausePractice(){if(!practice)return;practice.running=false;resumeAfterSound=false;showScreen('pause-screen','pause-title');}
+ $('brand').addEventListener('click',event=>{event.preventDefault();home();});
+ $('nav-activities').addEventListener('click',()=>openExplore());
+ ['explore-home','finish-home','pause-home'].forEach(id=>$(id).addEventListener('click',home));
+ ['explore-trigger','finish-explore','example-explore'].forEach(id=>$(id).addEventListener('click',()=>openExplore()));
  document.querySelectorAll('[data-home-territory]').forEach(button=>button.addEventListener('click',()=>openExplore(button.dataset.homeTerritory)));
- $('explore-trigger').addEventListener('click',openExplore);$('finish-explore').addEventListener('click',openExplore);$('intro-explore').addEventListener('click',openExplore);$('explore-home').addEventListener('click',()=>showScreen('home-screen','home-title'));
- function renderExplore(){document.querySelectorAll('[data-territory]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.territory===territory)));$('territory-hint').textContent=hints[territory];$('practice-list').replaceChildren();C.practices.filter(p=>p.territory===territory).forEach(p=>{
-  const button=document.createElement('button');button.type='button';button.className='practice-choice';const img=document.createElement('img'),asset=p.cover||p.steps[0].images[0];img.src=asset.src;img.alt='';img.className='practice-thumb';img.width=76;img.height=76;
-  const copy=document.createElement('span');copy.className='practice-card-copy';const title=document.createElement('span');title.className='practice-card-title';title.textContent=p.title;const summary=document.createElement('span');summary.className='practice-card-summary';summary.textContent=p.summary;const status=document.createElement('span');status.className='practice-card-status';status.textContent=state.completed.includes(p.id)?'Visitada · Puedes repetirla':'Ejemplo · 3 pasos · Un caso opcional';copy.append(title,summary,status);button.append(img,copy);button.addEventListener('click',()=>startPractice(p.id));$('practice-list').appendChild(button);
- });}
  document.querySelectorAll('[data-territory]').forEach(button=>button.addEventListener('click',()=>{territory=button.dataset.territory;renderExplore();}));
- function startPractice(id){const p=C.byId(id);if(!p)throw new Error('Práctica desconocida');state.current=id;practice={id,step:0,choice:null,caseChoice:null,running:false,phase:'intro',responded:new Set()};$('intro-title').textContent=p.title;$('intro-what').textContent=p.intro.what;$('intro-why').textContent=p.intro.why;$('intro-purpose').textContent=p.intro.purpose;showScreen('intro-screen','intro-title');}
- $('begin-practice').addEventListener('click',()=>{if(!practice||practice.phase!=='intro')return;const p=C.byId(practice.id);practice.phase='example';practice.running=true;$('example-title').textContent=p.title;$('example-situation').textContent=p.example.situation;$('example-response').textContent=p.example.response;$('example-explanation').textContent=p.example.explanation;showScreen('example-screen','example-title');});
- $('example-continue').addEventListener('click',()=>{if(!practice?.running||practice.phase!=='example')return;practice.phase='question';renderQuestion();showScreen('question-screen','practice-title');});
- function renderQuestion(){if(!practice)return;const p=C.byId(practice.id),step=C.questionAt(p,practice.step);$('practice-name').textContent=p.title;$('step-count').textContent='Paso '+(practice.step+1)+' de '+p.steps.length;$('practice-progress').max=p.steps.length;$('practice-progress').value=practice.step+1;$('practice-title').textContent=step.question;$('previous-question').disabled=practice.step===0;$('leave-question-open').textContent='Pasar pregunta';['a','b','c'].forEach((value,index)=>{const asset=step.images[index],img=$('association-'+value+'-image');img.src=asset.src;img.alt=asset.alt;img.style.objectPosition=asset.position||'center';$('association-'+value+'-caption').textContent=asset.label||'Foto '+(index+1);$('association-'+value).setAttribute('aria-pressed',String(practice.choice===value));});$('association-none').setAttribute('aria-pressed',String(practice.choice==='none'));}
- function chooseImage(choice){if(!practice?.running||practice.phase!=='question')return;practice.choice=choice;practice.responded.add(practice.step);practice.phase='insight';renderInsight();showScreen('insight-screen','insight-title');}
- function renderInsight(){if(!practice)return;const p=C.byId(practice.id),step=C.questionAt(p,practice.step),hasPhoto=practice.choice!=='none',asset=hasPhoto?step.images[['a','b','c'].indexOf(practice.choice)]:null;$('insight-count').textContent='Paso '+(practice.step+1)+' de '+p.steps.length;$('insight-question').textContent=step.question;$('insight-title').textContent=step.skill||p.skill;$('practice-key-text').textContent=step.reflection;$('practice-key-importance').textContent=step.why||p.why;$('chosen-image-wrap').hidden=!hasPhoto;$('own-image-note').hidden=hasPhoto;$('photo-source').hidden=!hasPhoto;if(asset){$('chosen-image').src=asset.src;$('chosen-image').alt=asset.alt;$('photo-source').href=asset.source;}$('next-question').textContent=practice.step===p.steps.length-1?'Ver un caso breve':'Siguiente paso';}
- ['a','b','c','none'].forEach(choice=>$('association-'+choice).addEventListener('click',()=>chooseImage(choice)));
- function moveQuestion(direction){if(!practice?.running||!['question','insight'].includes(practice.phase))return;const p=C.byId(practice.id);$('chosen-image').src='assets/photos/coast-path.jpg';$('chosen-image').alt='';if(direction>0&&practice.step===p.steps.length-1){practice.choice=null;openCase();return;}if(direction<0&&practice.step===0)return;practice.step=Math.max(0,Math.min(p.steps.length-1,practice.step+direction));practice.choice=null;practice.phase='question';renderQuestion();showScreen('question-screen','practice-title');}
- $('next-question').addEventListener('click',()=>moveQuestion(1));$('previous-question').addEventListener('click',()=>moveQuestion(-1));$('leave-question-open').addEventListener('click',()=>moveQuestion(1));$('review-image').addEventListener('click',()=>{if(!practice?.running||practice.phase!=='insight')return;practice.phase='question';renderQuestion();showScreen('question-screen','practice-title');});
- function openCase(){if(!practice?.running)return;const p=C.byId(practice.id);practice.phase='check';$('check-title').textContent=p.check.question;['a','b','c'].forEach((letter,index)=>$('check-'+letter).textContent=p.check.options[index]);showScreen('check-screen','check-title');}
- ['a','b','c'].forEach((letter,index)=>$('check-'+letter).addEventListener('click',()=>{if(!practice?.running||practice.phase!=='check')return;const p=C.byId(practice.id);practice.caseChoice=index;practice.phase='feedback';$('check-feedback-title').textContent=index===p.check.answer?'Esta opción ensaya la habilidad.':'Veamos otra forma de responder.';$('check-answer').textContent=p.check.options[p.check.answer];$('check-feedback-copy').textContent=p.check.explanation;showScreen('check-feedback-screen','check-feedback-title');}));
- $('skip-check').addEventListener('click',()=>{if(practice?.running&&practice.phase==='check')finishPractice();});
- $('check-continue').addEventListener('click',()=>{if(practice?.running&&practice.phase==='feedback')finishPractice();});
- $('check-again').addEventListener('click',openCase);
- function finishPractice(){const id=practice.id,responded=practice.responded.size,p=C.byId(id),visited=responded>0||practice.caseChoice!==null;if(visited)state=C.finish(state,id);lastPractice=id;practice=null;persist();$('chosen-image').src='assets/photos/coast-path.jpg';$('chosen-image').alt='';$('finish-title').textContent=visited?'Un paso que puedas probar.':'Puedes dejar las preguntas abiertas.';$('finish-copy').textContent=visited?'Exploraste «'+p.title+'». ¿En qué situación de tu día podrías probarlo?':'Dejaste las preguntas abiertas. Puedes volver cuando te resulte oportuno.';$('transfer-card').hidden=!visited;$('finish-transfer').textContent=p.transfer;$('finish-progress').textContent=visited?'En tu recorrido: '+state.completed.length+' '+(state.completed.length===1?'práctica visitada.':'prácticas visitadas.')+' Puedes repetir cuando te sirva.':'También puedes explorar otro ejemplo cuando quieras.';$('finish-next').textContent='Otra práctica: '+C.byId(p.next).title;showScreen('finish-screen','finish-title');}
- $('finish-next').addEventListener('click',()=>{if(lastPractice)startPractice(C.byId(lastPractice).next);});
+ $('example-start').addEventListener('click',()=>{if(!practice?.running||practice.phase!=='example')return;practice.phase='step';renderStep();showScreen('step-screen','practice-title');});
+ ['step-next','step-skip'].forEach(id=>$(id).addEventListener('click',()=>advance(1)));
+ $('step-previous').addEventListener('click',()=>advance(-1));
  $('finish-repeat').addEventListener('click',()=>{if(lastPractice)startPractice(lastPractice);});
- $('finish-exit').addEventListener('click',()=>endPractice());
- function pausePractice(){if(!practice||practice.phase==='intro')return;practice.running=false;showScreen('pause-screen','pause-title');}
- ['pause-practice','example-pause','check-pause'].forEach(id=>$(id).addEventListener('click',pausePractice));$('pause-exit').addEventListener('click',()=>endPractice());$('resume-practice').addEventListener('click',()=>{if(!practice||!phaseScreens[practice.phase])return;practice.running=true;showScreen(...phaseScreens[practice.phase]);});
+ $('finish-case').addEventListener('click',openCase);
+ ['a','b','c'].forEach(letter=>$('check-'+letter).addEventListener('click',()=>{
+  if(!practice?.running||practice.phase!=='check')return;
+  const p=C.byId(practice.id);practice.phase='feedback';
+  $('check-answer').textContent=p.check.options[p.check.answer];$('check-explanation').textContent=p.check.explanation;
+  showScreen('feedback-screen','feedback-title');
+ }));
+ ['skip-check','check-finish'].forEach(id=>$(id).addEventListener('click',()=>{if(practice?.running&&['check','feedback'].includes(practice.phase))finishPractice();}));
+ $('check-again').addEventListener('click',()=>{if(!practice?.running||practice.phase!=='feedback')return;practice.phase='check';renderCase();showScreen('check-screen','check-title');});
+ ['pause-practice','check-pause'].forEach(id=>$(id).addEventListener('click',pausePractice));
+ $('resume-practice').addEventListener('click',()=>{if(!practice||!phaseScreens[practice.phase])return;practice.running=true;showScreen(...phaseScreens[practice.phase]);});
+ function renderSound(){document.querySelectorAll('input[name="ambience"]').forEach(input=>input.checked=input.value===sound.ambience);$('ambient-volume-row').hidden=sound.ambience==='off';$('sound-label').textContent=labels[sound.ambience];}
+ $('sound-trigger').addEventListener('click',()=>{
+  resumeAfterSound=!!practice?.running;if(practice)practice.running=false;syncSound();renderSound();
+  $('sound-status').textContent=practice?'La actividad está en pausa mientras eliges.':'El sonido empieza cuando abres una actividad.';$('sound-dialog').showModal();
+ });
+ sound.callbacks={onError(message){$('sound-status').textContent=message;notify(message);renderSound();}};
+ document.querySelectorAll('input[name="ambience"]').forEach(input=>input.addEventListener('change',async()=>{
+  if(!input.checked)return;$('sound-status').textContent=input.value==='off'?'Silencio seleccionado.':'Preparando el sonido…';
+  await sound.setAmbience(input.value);renderSound();
+  if(sound.ambience===input.value)$('sound-status').textContent=input.value==='off'?'Silencio seleccionado.':'Sonido listo. Se escuchará durante la actividad.';
+ }));
+ $('ambient-volume').addEventListener('input',()=>{sound.setVolume(Number($('ambient-volume').value)/100);$('ambient-volume-value').textContent=$('ambient-volume').value+' %';});
+ $('sound-dialog').addEventListener('close',()=>{if(resumeAfterSound&&practice&&!document.hidden&&screen!=='pause-screen')practice.running=true;resumeAfterSound=false;syncSound();renderSound();});
+ document.querySelectorAll('[data-close]').forEach(button=>button.addEventListener('click',()=>$(button.dataset.close).close()));
  function renderAbout(tab){document.querySelectorAll('[data-about]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.about===tab)));['use','privacy','basis'].forEach(id=>$('about-'+id).hidden=id!==tab);}
- $('about-trigger').addEventListener('click',()=>{renderAbout('use');$('about-dialog').showModal();syncSound();});document.querySelectorAll('[data-about]').forEach(button=>button.addEventListener('click',()=>renderAbout(button.dataset.about)));$('about-dialog').addEventListener('close',syncSound);$('remember-practices').addEventListener('change',()=>{state.remember=$('remember-practices').checked;persist();});
- document.addEventListener('visibilitychange',()=>{if(document.hidden&&practice)pausePractice();syncSound();});window.addEventListener('pagehide',()=>{if(practice)practice.running=false;resetCreatorMessage();clearDirectMessage();sound.setBlocked(true);persist();});window.addEventListener('pageshow',()=>{if(practice&&!practice.running&&practice.phase!=='intro')showScreen('pause-screen','pause-title');syncSound();});
- function publicState(){const phases={intro:'introduccion',example:'ejemplo',question:'pregunta',insight:'reflexion',check:'caso',feedback:'explicacion'};return {casilla:state.current,practicasRealizadas:[...state.completed],practicaEnCurso:practice?{casilla:practice.id,fase:phases[practice.phase],preguntaActual:['question','insight'].includes(practice.phase)?practice.step+1:0,totalPreguntas:C.byId(practice.id).steps.length,enPausa:practice.phase!=='intro'&&!practice.running}:null};}
- if(document.modelContext?.registerTool){const lifecycle=new AbortController(),definitions=[
- {name:'read_labyrinth_state',title:'Consultar mi práctica',description:'Consulta la práctica abierta y las prácticas visitadas. No contiene respuestas ni evaluaciones.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute(input){if(!input||typeof input!=='object'||Object.keys(input).length)throw new Error('No se admiten parámetros');return publicState();}},
- {name:'navigate_to_practice_room',title:'Elegir una práctica',description:'Selecciona una práctica disponible. No la comienza ni registra respuestas.',inputSchema:{type:'object',properties:{roomId:{type:'string',enum:C.practices.map(p=>p.id)}},required:['roomId'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){if(!input||typeof input.roomId!=='string'||Object.keys(input).some(k=>k!=='roomId')||!C.byId(input.roomId))throw new Error('Se necesita una práctica válida');if(practice)throw new Error('Termina la práctica actual antes de cambiar');state.current=input.roomId;territory=C.byId(input.roomId).territory;openExplore();return publicState();}},
- {name:'start_current_guided_practice',title:'Preparar mi práctica',description:'Abre la introducción de la práctica elegida. La persona decide cuándo empezar sus tres preguntas. No recoge respuestas.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){if(!input||typeof input!=='object'||Object.keys(input).length)throw new Error('No se admiten parámetros');if(practice)throw new Error('Ya hay una práctica en curso');startPractice(state.current);return publicState();}}
- ];for(const definition of definitions){try{Promise.resolve(document.modelContext.registerTool(definition,{signal:lifecycle.signal})).catch(()=>{});}catch(_){}}window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});}
- persist();renderSound();syncSound();
+ $('about-trigger').addEventListener('click',()=>{if(practice)pausePractice();renderAbout('use');$('about-dialog').showModal();syncSound();});
+ document.querySelectorAll('[data-about]').forEach(button=>button.addEventListener('click',()=>renderAbout(button.dataset.about)));
+ $('about-dialog').addEventListener('close',()=>{syncSound();$('about-trigger').focus({preventScroll:true});});
+ $('remember-practices').addEventListener('change',()=>{state.remember=$('remember-practices').checked;persist();});
+ document.querySelectorAll('[data-open-contact]').forEach(button=>button.addEventListener('click',()=>{
+  if(practice)pausePractice();if($('about-dialog').open)$('about-dialog').close();$('contact-dialog').showModal();syncSound();$('contact-title').focus({preventScroll:true});
+ }));
+ $('contact-dialog').addEventListener('close',()=>{syncSound();$('about-trigger').focus({preventScroll:true});});
+ function updateDirectMessage(){
+  const text=$('direct-message-text').value.trim(),ready=text.length>0&&text.length<=1000,subject=encodeURIComponent('Un mensaje para Andrés Zuluaga · INSIDE'),body=encodeURIComponent(text);
+  $('direct-message-mail').href=ready?'mailto:inside.ecosistema@gmail.com?subject='+subject+'&body='+body:'#direct-message-text';
+  $('direct-message-gmail').href=ready?'https://mail.google.com/mail/?view=cm&fs=1&to=inside.ecosistema%40gmail.com&su='+subject+'&body='+body:'#direct-message-text';
+  ['direct-message-mail','direct-message-gmail'].forEach(id=>$(id).setAttribute('aria-disabled',String(!ready)));$('direct-message-error').hidden=true;return ready;
+ }
+ function clearDirectMessage(){$('direct-message-text').value='';updateDirectMessage();}
+ document.querySelectorAll('[data-open-message]').forEach(button=>button.addEventListener('click',()=>{
+  messageReturnTo=button.id;if(practice)pausePractice();clearDirectMessage();$('direct-message-dialog').showModal();syncSound();$('direct-message-title').focus({preventScroll:true});
+ }));
+ $('direct-message-text').addEventListener('input',updateDirectMessage);
+ ['direct-message-mail','direct-message-gmail'].forEach(id=>$(id).addEventListener('click',event=>{
+  if(updateDirectMessage())return;event.preventDefault();$('direct-message-error').textContent='Escribe un mensaje de hasta 1000 caracteres antes de abrir tu correo.';$('direct-message-error').hidden=false;$('direct-message-text').focus();
+ }));
+ $('direct-message-clear').addEventListener('click',()=>{clearDirectMessage();$('direct-message-text').focus();});
+ $('direct-message-dialog').addEventListener('close',()=>{clearDirectMessage();syncSound();$(messageReturnTo).focus({preventScroll:true});});
+ document.addEventListener('visibilitychange',()=>{if(document.hidden){resumeAfterSound=false;if(practice)pausePractice();}syncSound();});
+ window.addEventListener('pagehide',()=>{resumeAfterSound=false;if(practice)practice.running=false;clearDirectMessage();sound.setBlocked(true);persist();});
+ window.addEventListener('pageshow',()=>{if(practice&&!practice.running)showScreen('pause-screen','pause-title');syncSound();});
+ function publicState(){const phases={example:'ejemplo',step:'paso',check:'caso',feedback:'explicacion'};return {casilla:state.current,practicasAbiertas:[...state.completed],practicaEnCurso:practice?{casilla:practice.id,fase:phases[practice.phase],pasoActual:practice.phase==='step'?practice.step+1:0,totalPasos:C.byId(practice.id).steps.length,enPausa:!practice.running}:null};}
+ if(document.modelContext?.registerTool){
+  const lifecycle=new AbortController(),definitions=[
+   {name:'read_labyrinth_state',title:'Consultar mi actividad',description:'Muestra la actividad abierta y el paso actual. No contiene respuestas ni evaluaciones.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute(input){if(!input||typeof input!=='object'||Object.keys(input).length)throw new Error('No se admiten parámetros');return publicState();}},
+   {name:'navigate_to_practice_room',title:'Elegir una actividad',description:'Selecciona una actividad disponible. No la comienza ni registra respuestas.',inputSchema:{type:'object',properties:{roomId:{type:'string',enum:C.practices.map(p=>p.id)}},required:['roomId'],additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){if(!input||typeof input.roomId!=='string'||Object.keys(input).some(k=>k!=='roomId')||!C.byId(input.roomId))throw new Error('Se necesita una actividad válida');if(practice)throw new Error('Sal de la actividad actual antes de cambiar');state.current=input.roomId;persist();openExplore(C.byId(input.roomId).territory);return publicState();}},
+   {name:'start_current_guided_practice',title:'Abrir mi actividad',description:'Abre el ejemplo de la actividad elegida. La persona decide si quiere probar los pasos. No recoge respuestas.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:false,untrustedContentHint:false},execute(input){if(!input||typeof input!=='object'||Object.keys(input).length)throw new Error('No se admiten parámetros');if(practice)throw new Error('Ya hay una actividad en curso');startPractice(state.current);return publicState();}}
+  ];
+  for(const definition of definitions){try{Promise.resolve(document.modelContext.registerTool(definition,{signal:lifecycle.signal})).catch(()=>{});}catch(_){}}
+  window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});
+ }
+ persist();renderSound();clearDirectMessage();syncSound();
 })();
